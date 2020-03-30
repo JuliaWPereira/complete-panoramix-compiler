@@ -1,0 +1,1196 @@
+Terminais sem uso na gramática
+
+   EOL
+
+
+Estado 88 conflitos: 1 de deslocamento/redução
+
+
+Gramática
+
+    0 $accept: program $end
+
+    1 program: decl_list
+
+    2 decl_list: decl_list decl
+    3          | decl
+
+    4 decl: var_decl
+    5     | fun_decl
+
+    6 e_type: INT
+    7       | VOID
+
+    8 fun_decl: e_type ID '(' params ')' com_decl
+
+    9 params: param_list
+   10       | VOID
+
+   11 param_list: param_list ',' param
+   12           | param
+
+   13 param: e_type ID
+   14      | e_type ID '[' ']'
+
+   15 stmt: sel_decl
+   16     | exp_decl
+   17     | it_decl
+   18     | ret_decl
+   19     | com_decl
+
+   20 stmt_list: %empty
+   21          | stmt_list stmt
+
+   22 sel_decl: IF '(' exp ')' stmt els_decl
+
+   23 els_decl: ELSE stmt
+   24         | %empty
+
+   25 it_decl: WHILE '(' exp ')' stmt
+
+   26 ret_decl: RETURN ';'
+   27         | RETURN exp ';'
+
+   28 com_decl: '{' loc_decl stmt_list '}'
+
+   29 loc_decl: %empty
+   30         | loc_decl var_decl
+
+   31 var_decl: e_type ID ';'
+   32         | e_type ID '[' NUM ']' ';'
+
+   33 exp_decl: exp ';'
+   34         | ';'
+
+   35 exp: exp CMP exp
+   36    | exp '+' exp
+   37    | exp '-' exp
+   38    | exp '*' exp
+   39    | exp '/' exp
+   40    | var '=' exp
+   41    | factor
+
+   42 factor: '(' exp ')'
+   43       | NUM
+   44       | var
+   45       | activate
+
+   46 var: ID
+   47    | ID '[' exp ']'
+
+   48 activate: ID '(' args ')'
+
+   49 args: %empty
+   50     | arg_list
+
+   51 arg_list: arg_list ',' exp
+   52         | exp
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+'(' (40) 8 22 25 42 48
+')' (41) 8 22 25 42 48
+'*' (42) 38
+'+' (43) 36
+',' (44) 11 51
+'-' (45) 37
+'/' (47) 39
+';' (59) 26 27 31 32 33 34
+'=' (61) 40
+'[' (91) 14 32 47
+']' (93) 14 32 47
+'{' (123) 28
+'}' (125) 28
+error (256)
+NUM (258) 32 43
+INT (259) 6
+VOID (260) 7 10
+ID (261) 8 13 14 31 32 46 47 48
+EOL (262)
+ELSE (263) 23
+IF (264) 22
+RETURN (265) 26 27
+WHILE (266) 25
+CMP (267) 35
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (26)
+    à esquerda: 0
+program (27)
+    à esquerda: 1, à direita: 0
+decl_list (28)
+    à esquerda: 2 3, à direita: 1 2
+decl (29)
+    à esquerda: 4 5, à direita: 2 3
+e_type (30)
+    à esquerda: 6 7, à direita: 8 13 14 31 32
+fun_decl (31)
+    à esquerda: 8, à direita: 5
+params (32)
+    à esquerda: 9 10, à direita: 8
+param_list (33)
+    à esquerda: 11 12, à direita: 9 11
+param (34)
+    à esquerda: 13 14, à direita: 11 12
+stmt (35)
+    à esquerda: 15 16 17 18 19, à direita: 21 22 23 25
+stmt_list (36)
+    à esquerda: 20 21, à direita: 21 28
+sel_decl (37)
+    à esquerda: 22, à direita: 15
+els_decl (38)
+    à esquerda: 23 24, à direita: 22
+it_decl (39)
+    à esquerda: 25, à direita: 17
+ret_decl (40)
+    à esquerda: 26 27, à direita: 18
+com_decl (41)
+    à esquerda: 28, à direita: 8 19
+loc_decl (42)
+    à esquerda: 29 30, à direita: 28 30
+var_decl (43)
+    à esquerda: 31 32, à direita: 4 30
+exp_decl (44)
+    à esquerda: 33 34, à direita: 16
+exp (45)
+    à esquerda: 35 36 37 38 39 40 41, à direita: 22 25 27 33 35 36
+    37 38 39 40 42 47 51 52
+factor (46)
+    à esquerda: 42 43 44 45, à direita: 41
+var (47)
+    à esquerda: 46 47, à direita: 40 44
+activate (48)
+    à esquerda: 48, à direita: 45
+args (49)
+    à esquerda: 49 50, à direita: 48
+arg_list (50)
+    à esquerda: 51 52, à direita: 50 51
+
+
+Estado 0
+
+    0 $accept: . program $end
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    program    ir ao estado 3
+    decl_list  ir ao estado 4
+    decl       ir ao estado 5
+    e_type     ir ao estado 6
+    fun_decl   ir ao estado 7
+    var_decl   ir ao estado 8
+
+
+Estado 1
+
+    6 e_type: INT .
+
+    $padrão  reduzir usando a regra 6 (e_type)
+
+
+Estado 2
+
+    7 e_type: VOID .
+
+    $padrão  reduzir usando a regra 7 (e_type)
+
+
+Estado 3
+
+    0 $accept: program . $end
+
+    $end  deslocar, e ir ao estado 9
+
+
+Estado 4
+
+    1 program: decl_list .
+    2 decl_list: decl_list . decl
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 1 (program)
+
+    decl      ir ao estado 10
+    e_type    ir ao estado 6
+    fun_decl  ir ao estado 7
+    var_decl  ir ao estado 8
+
+
+Estado 5
+
+    3 decl_list: decl .
+
+    $padrão  reduzir usando a regra 3 (decl_list)
+
+
+Estado 6
+
+    8 fun_decl: e_type . ID '(' params ')' com_decl
+   31 var_decl: e_type . ID ';'
+   32         | e_type . ID '[' NUM ']' ';'
+
+    ID  deslocar, e ir ao estado 11
+
+
+Estado 7
+
+    5 decl: fun_decl .
+
+    $padrão  reduzir usando a regra 5 (decl)
+
+
+Estado 8
+
+    4 decl: var_decl .
+
+    $padrão  reduzir usando a regra 4 (decl)
+
+
+Estado 9
+
+    0 $accept: program $end .
+
+    $padrão  aceitar
+
+
+Estado 10
+
+    2 decl_list: decl_list decl .
+
+    $padrão  reduzir usando a regra 2 (decl_list)
+
+
+Estado 11
+
+    8 fun_decl: e_type ID . '(' params ')' com_decl
+   31 var_decl: e_type ID . ';'
+   32         | e_type ID . '[' NUM ']' ';'
+
+    '('  deslocar, e ir ao estado 12
+    '['  deslocar, e ir ao estado 13
+    ';'  deslocar, e ir ao estado 14
+
+
+Estado 12
+
+    8 fun_decl: e_type ID '(' . params ')' com_decl
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 15
+
+    e_type      ir ao estado 16
+    params      ir ao estado 17
+    param_list  ir ao estado 18
+    param       ir ao estado 19
+
+
+Estado 13
+
+   32 var_decl: e_type ID '[' . NUM ']' ';'
+
+    NUM  deslocar, e ir ao estado 20
+
+
+Estado 14
+
+   31 var_decl: e_type ID ';' .
+
+    $padrão  reduzir usando a regra 31 (var_decl)
+
+
+Estado 15
+
+    7 e_type: VOID .
+   10 params: VOID .
+
+    ')'       reduzir usando a regra 10 (params)
+    $padrão  reduzir usando a regra 7 (e_type)
+
+
+Estado 16
+
+   13 param: e_type . ID
+   14      | e_type . ID '[' ']'
+
+    ID  deslocar, e ir ao estado 21
+
+
+Estado 17
+
+    8 fun_decl: e_type ID '(' params . ')' com_decl
+
+    ')'  deslocar, e ir ao estado 22
+
+
+Estado 18
+
+    9 params: param_list .
+   11 param_list: param_list . ',' param
+
+    ','  deslocar, e ir ao estado 23
+
+    $padrão  reduzir usando a regra 9 (params)
+
+
+Estado 19
+
+   12 param_list: param .
+
+    $padrão  reduzir usando a regra 12 (param_list)
+
+
+Estado 20
+
+   32 var_decl: e_type ID '[' NUM . ']' ';'
+
+    ']'  deslocar, e ir ao estado 24
+
+
+Estado 21
+
+   13 param: e_type ID .
+   14      | e_type ID . '[' ']'
+
+    '['  deslocar, e ir ao estado 25
+
+    $padrão  reduzir usando a regra 13 (param)
+
+
+Estado 22
+
+    8 fun_decl: e_type ID '(' params ')' . com_decl
+
+    '{'  deslocar, e ir ao estado 26
+
+    com_decl  ir ao estado 27
+
+
+Estado 23
+
+   11 param_list: param_list ',' . param
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    e_type  ir ao estado 16
+    param   ir ao estado 28
+
+
+Estado 24
+
+   32 var_decl: e_type ID '[' NUM ']' . ';'
+
+    ';'  deslocar, e ir ao estado 29
+
+
+Estado 25
+
+   14 param: e_type ID '[' . ']'
+
+    ']'  deslocar, e ir ao estado 30
+
+
+Estado 26
+
+   28 com_decl: '{' . loc_decl stmt_list '}'
+
+    $padrão  reduzir usando a regra 29 (loc_decl)
+
+    loc_decl  ir ao estado 31
+
+
+Estado 27
+
+    8 fun_decl: e_type ID '(' params ')' com_decl .
+
+    $padrão  reduzir usando a regra 8 (fun_decl)
+
+
+Estado 28
+
+   11 param_list: param_list ',' param .
+
+    $padrão  reduzir usando a regra 11 (param_list)
+
+
+Estado 29
+
+   32 var_decl: e_type ID '[' NUM ']' ';' .
+
+    $padrão  reduzir usando a regra 32 (var_decl)
+
+
+Estado 30
+
+   14 param: e_type ID '[' ']' .
+
+    $padrão  reduzir usando a regra 14 (param)
+
+
+Estado 31
+
+   28 com_decl: '{' loc_decl . stmt_list '}'
+   30 loc_decl: loc_decl . var_decl
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 20 (stmt_list)
+
+    e_type     ir ao estado 32
+    stmt_list  ir ao estado 33
+    var_decl   ir ao estado 34
+
+
+Estado 32
+
+   31 var_decl: e_type . ID ';'
+   32         | e_type . ID '[' NUM ']' ';'
+
+    ID  deslocar, e ir ao estado 35
+
+
+Estado 33
+
+   21 stmt_list: stmt_list . stmt
+   28 com_decl: '{' loc_decl stmt_list . '}'
+
+    NUM     deslocar, e ir ao estado 36
+    ID      deslocar, e ir ao estado 37
+    IF      deslocar, e ir ao estado 38
+    RETURN  deslocar, e ir ao estado 39
+    WHILE   deslocar, e ir ao estado 40
+    '('     deslocar, e ir ao estado 41
+    ';'     deslocar, e ir ao estado 42
+    '{'     deslocar, e ir ao estado 26
+    '}'     deslocar, e ir ao estado 43
+
+    stmt      ir ao estado 44
+    sel_decl  ir ao estado 45
+    it_decl   ir ao estado 46
+    ret_decl  ir ao estado 47
+    com_decl  ir ao estado 48
+    exp_decl  ir ao estado 49
+    exp       ir ao estado 50
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 34
+
+   30 loc_decl: loc_decl var_decl .
+
+    $padrão  reduzir usando a regra 30 (loc_decl)
+
+
+Estado 35
+
+   31 var_decl: e_type ID . ';'
+   32         | e_type ID . '[' NUM ']' ';'
+
+    '['  deslocar, e ir ao estado 13
+    ';'  deslocar, e ir ao estado 14
+
+
+Estado 36
+
+   43 factor: NUM .
+
+    $padrão  reduzir usando a regra 43 (factor)
+
+
+Estado 37
+
+   46 var: ID .
+   47    | ID . '[' exp ']'
+   48 activate: ID . '(' args ')'
+
+    '('  deslocar, e ir ao estado 54
+    '['  deslocar, e ir ao estado 55
+
+    $padrão  reduzir usando a regra 46 (var)
+
+
+Estado 38
+
+   22 sel_decl: IF . '(' exp ')' stmt els_decl
+
+    '('  deslocar, e ir ao estado 56
+
+
+Estado 39
+
+   26 ret_decl: RETURN . ';'
+   27         | RETURN . exp ';'
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+    ';'  deslocar, e ir ao estado 57
+
+    exp       ir ao estado 58
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 40
+
+   25 it_decl: WHILE . '(' exp ')' stmt
+
+    '('  deslocar, e ir ao estado 59
+
+
+Estado 41
+
+   42 factor: '(' . exp ')'
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 60
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 42
+
+   34 exp_decl: ';' .
+
+    $padrão  reduzir usando a regra 34 (exp_decl)
+
+
+Estado 43
+
+   28 com_decl: '{' loc_decl stmt_list '}' .
+
+    $padrão  reduzir usando a regra 28 (com_decl)
+
+
+Estado 44
+
+   21 stmt_list: stmt_list stmt .
+
+    $padrão  reduzir usando a regra 21 (stmt_list)
+
+
+Estado 45
+
+   15 stmt: sel_decl .
+
+    $padrão  reduzir usando a regra 15 (stmt)
+
+
+Estado 46
+
+   17 stmt: it_decl .
+
+    $padrão  reduzir usando a regra 17 (stmt)
+
+
+Estado 47
+
+   18 stmt: ret_decl .
+
+    $padrão  reduzir usando a regra 18 (stmt)
+
+
+Estado 48
+
+   19 stmt: com_decl .
+
+    $padrão  reduzir usando a regra 19 (stmt)
+
+
+Estado 49
+
+   16 stmt: exp_decl .
+
+    $padrão  reduzir usando a regra 16 (stmt)
+
+
+Estado 50
+
+   33 exp_decl: exp . ';'
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ';'  deslocar, e ir ao estado 66
+
+
+Estado 51
+
+   41 exp: factor .
+
+    $padrão  reduzir usando a regra 41 (exp)
+
+
+Estado 52
+
+   40 exp: var . '=' exp
+   44 factor: var .
+
+    '='  deslocar, e ir ao estado 67
+
+    $padrão  reduzir usando a regra 44 (factor)
+
+
+Estado 53
+
+   45 factor: activate .
+
+    $padrão  reduzir usando a regra 45 (factor)
+
+
+Estado 54
+
+   48 activate: ID '(' . args ')'
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    $padrão  reduzir usando a regra 49 (args)
+
+    exp       ir ao estado 68
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+    args      ir ao estado 69
+    arg_list  ir ao estado 70
+
+
+Estado 55
+
+   47 var: ID '[' . exp ']'
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 71
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 56
+
+   22 sel_decl: IF '(' . exp ')' stmt els_decl
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 72
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 57
+
+   26 ret_decl: RETURN ';' .
+
+    $padrão  reduzir usando a regra 26 (ret_decl)
+
+
+Estado 58
+
+   27 ret_decl: RETURN exp . ';'
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ';'  deslocar, e ir ao estado 73
+
+
+Estado 59
+
+   25 it_decl: WHILE '(' . exp ')' stmt
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 74
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 60
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   42 factor: '(' exp . ')'
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ')'  deslocar, e ir ao estado 75
+
+
+Estado 61
+
+   35 exp: exp CMP . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 76
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 62
+
+   36 exp: exp '+' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 77
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 63
+
+   37 exp: exp '-' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 78
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 64
+
+   38 exp: exp '*' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 79
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 65
+
+   39 exp: exp '/' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 80
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 66
+
+   33 exp_decl: exp ';' .
+
+    $padrão  reduzir usando a regra 33 (exp_decl)
+
+
+Estado 67
+
+   40 exp: var '=' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 81
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 68
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   52 arg_list: exp .
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 52 (arg_list)
+
+
+Estado 69
+
+   48 activate: ID '(' args . ')'
+
+    ')'  deslocar, e ir ao estado 82
+
+
+Estado 70
+
+   50 args: arg_list .
+   51 arg_list: arg_list . ',' exp
+
+    ','  deslocar, e ir ao estado 83
+
+    $padrão  reduzir usando a regra 50 (args)
+
+
+Estado 71
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   47 var: ID '[' exp . ']'
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ']'  deslocar, e ir ao estado 84
+
+
+Estado 72
+
+   22 sel_decl: IF '(' exp . ')' stmt els_decl
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ')'  deslocar, e ir ao estado 85
+
+
+Estado 73
+
+   27 ret_decl: RETURN exp ';' .
+
+    $padrão  reduzir usando a regra 27 (ret_decl)
+
+
+Estado 74
+
+   25 it_decl: WHILE '(' exp . ')' stmt
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+    ')'  deslocar, e ir ao estado 86
+
+
+Estado 75
+
+   42 factor: '(' exp ')' .
+
+    $padrão  reduzir usando a regra 42 (factor)
+
+
+Estado 76
+
+   35 exp: exp . CMP exp
+   35    | exp CMP exp .
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    CMP  erro (não associativo)
+
+    $padrão  reduzir usando a regra 35 (exp)
+
+
+Estado 77
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   36    | exp '+' exp .
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 36 (exp)
+
+
+Estado 78
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   37    | exp '-' exp .
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 37 (exp)
+
+
+Estado 79
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   38    | exp '*' exp .
+   39    | exp . '/' exp
+
+    $padrão  reduzir usando a regra 38 (exp)
+
+
+Estado 80
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   39    | exp '/' exp .
+
+    $padrão  reduzir usando a regra 39 (exp)
+
+
+Estado 81
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   40    | var '=' exp .
+
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 40 (exp)
+
+
+Estado 82
+
+   48 activate: ID '(' args ')' .
+
+    $padrão  reduzir usando a regra 48 (activate)
+
+
+Estado 83
+
+   51 arg_list: arg_list ',' . exp
+
+    NUM  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 37
+    '('  deslocar, e ir ao estado 41
+
+    exp       ir ao estado 87
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 84
+
+   47 var: ID '[' exp ']' .
+
+    $padrão  reduzir usando a regra 47 (var)
+
+
+Estado 85
+
+   22 sel_decl: IF '(' exp ')' . stmt els_decl
+
+    NUM     deslocar, e ir ao estado 36
+    ID      deslocar, e ir ao estado 37
+    IF      deslocar, e ir ao estado 38
+    RETURN  deslocar, e ir ao estado 39
+    WHILE   deslocar, e ir ao estado 40
+    '('     deslocar, e ir ao estado 41
+    ';'     deslocar, e ir ao estado 42
+    '{'     deslocar, e ir ao estado 26
+
+    stmt      ir ao estado 88
+    sel_decl  ir ao estado 45
+    it_decl   ir ao estado 46
+    ret_decl  ir ao estado 47
+    com_decl  ir ao estado 48
+    exp_decl  ir ao estado 49
+    exp       ir ao estado 50
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 86
+
+   25 it_decl: WHILE '(' exp ')' . stmt
+
+    NUM     deslocar, e ir ao estado 36
+    ID      deslocar, e ir ao estado 37
+    IF      deslocar, e ir ao estado 38
+    RETURN  deslocar, e ir ao estado 39
+    WHILE   deslocar, e ir ao estado 40
+    '('     deslocar, e ir ao estado 41
+    ';'     deslocar, e ir ao estado 42
+    '{'     deslocar, e ir ao estado 26
+
+    stmt      ir ao estado 89
+    sel_decl  ir ao estado 45
+    it_decl   ir ao estado 46
+    ret_decl  ir ao estado 47
+    com_decl  ir ao estado 48
+    exp_decl  ir ao estado 49
+    exp       ir ao estado 50
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 87
+
+   35 exp: exp . CMP exp
+   36    | exp . '+' exp
+   37    | exp . '-' exp
+   38    | exp . '*' exp
+   39    | exp . '/' exp
+   51 arg_list: arg_list ',' exp .
+
+    CMP  deslocar, e ir ao estado 61
+    '+'  deslocar, e ir ao estado 62
+    '-'  deslocar, e ir ao estado 63
+    '*'  deslocar, e ir ao estado 64
+    '/'  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 51 (arg_list)
+
+
+Estado 88
+
+   22 sel_decl: IF '(' exp ')' stmt . els_decl
+
+    ELSE  deslocar, e ir ao estado 90
+
+    ELSE      [reduzir usando a regra 24 (els_decl)]
+    $padrão  reduzir usando a regra 24 (els_decl)
+
+    els_decl  ir ao estado 91
+
+
+Estado 89
+
+   25 it_decl: WHILE '(' exp ')' stmt .
+
+    $padrão  reduzir usando a regra 25 (it_decl)
+
+
+Estado 90
+
+   23 els_decl: ELSE . stmt
+
+    NUM     deslocar, e ir ao estado 36
+    ID      deslocar, e ir ao estado 37
+    IF      deslocar, e ir ao estado 38
+    RETURN  deslocar, e ir ao estado 39
+    WHILE   deslocar, e ir ao estado 40
+    '('     deslocar, e ir ao estado 41
+    ';'     deslocar, e ir ao estado 42
+    '{'     deslocar, e ir ao estado 26
+
+    stmt      ir ao estado 92
+    sel_decl  ir ao estado 45
+    it_decl   ir ao estado 46
+    ret_decl  ir ao estado 47
+    com_decl  ir ao estado 48
+    exp_decl  ir ao estado 49
+    exp       ir ao estado 50
+    factor    ir ao estado 51
+    var       ir ao estado 52
+    activate  ir ao estado 53
+
+
+Estado 91
+
+   22 sel_decl: IF '(' exp ')' stmt els_decl .
+
+    $padrão  reduzir usando a regra 22 (sel_decl)
+
+
+Estado 92
+
+   23 els_decl: ELSE stmt .
+
+    $padrão  reduzir usando a regra 23 (els_decl)
