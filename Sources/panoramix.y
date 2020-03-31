@@ -320,40 +320,54 @@ arg_list: arg_list ',' exp
 
 int main(int argc, char **argv)
 {
-	int out = open("symtab.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+	/* Create AST and print logs into a file */
+	int out = open("analysis.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
     if (-1 == out) { perror("opening symtab.txt"); return 255; }
-
-    int err = open("cerr.log", O_RDWR|O_CREAT|O_APPEND, 0600);
-    if (-1 == err) { perror("opening cerr.log"); return 255; }
-
-    int save_out = dup(fileno(stdout));
-    int save_err = dup(fileno(stderr));
-
+	int save_out = dup(fileno(stdout));
     if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
-    if (-1 == dup2(err, fileno(stderr))) { perror("cannot redirect stderr"); return 255; }
-
+    
     yyparse();
-	createSymTab(tree);
+    createSymTab(tree);
+
+    fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
+
+    /* Print Symbol Table */
+	out = open("symtable.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+    if (-1 == out) { perror("opening symtable.txt"); return 255; }
+	save_out = dup(fileno(stdout));
+    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
+    
 	printSymTab();
-	printf("\n\n");
+
+	fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
+
+
+    /* Print Symbol Table */
+	out = open("ast.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+    if (-1 == out) { perror("opening ast.txt"); return 255; }
+	save_out = dup(fileno(stdout));
+    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
+    
 	printf("\n\n>>Abstract Syntax Tree<<\n\n");
 	printtree(tree,levels(tree) / 2);
-	printf("\n\n");
+
+	fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
+	
+
+
 	//generateInterCode(tree);	
 	//printf("\n\n");
 	//printf("\n\n");
 	//printtree(tree,0);
-	printf("\n\n");
-	printf("\n\n");
 	
 
 
-    fflush(stdout); close(out);
-    fflush(stderr); close(err);
-
-    dup2(save_out, fileno(stdout));
-    dup2(save_err, fileno(stderr));
-
-    close(save_out);
-    close(save_err);
+    
+    
 }

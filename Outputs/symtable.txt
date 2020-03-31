@@ -1,0 +1,17 @@
+|-------------------------------------------------------|
+|                      Symbol Table                     |
+|-------------------------------------------------------|
+| identifier | type |      scope |  decl_line | return  |
+|-------------------------------------------------------|
+|          a |int   |     minloc |          6 |    -    |
+|          i |int   |     minloc |          7 |    -    |
+|          k |int   |     minloc |          7 |    -    |
+|          t |int   |       sort |         25 |    -    |
+|          x |int   |     minloc |          7 |    -    |
+|       sort |func  |       sort |         21 |   int   |
+|     minloc |func  |     minloc |          6 |   int   |
+|       main |func  |       main |         34 |   void  |
+|       high |int   |     minloc |          6 |    -    |
+|        low |int   |     minloc |          6 |    -    |
+|        vet |int[] |     global |          4 |    -    |
+|-------------------------------------------------------|

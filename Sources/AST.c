@@ -529,7 +529,6 @@ void printSymbol(struct symbol *sym)
 
 void printSymTab()
 {
-	printf("\n\n");
 	printf("|-------------------------------------------------------|\n");
 	printf("|                      Symbol Table                     |\n");
 	printf("|-------------------------------------------------------|\n");

@@ -1,0 +1,1 @@
+7: semantic error: Redeclaration of variable: k
