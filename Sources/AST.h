@@ -69,6 +69,7 @@ struct symlist {
 	struct symlist *next;
 };
 
+
 /* Definition of a simple symtab of fixed size */
 #define NHASH 9997
 struct symlist* symtab[NHASH];
@@ -198,6 +199,21 @@ struct symasgn {
 	struct symref *symref;
 	struct ast *value;
 };
+
+/***********************************/
+struct quadruple
+{
+	int op;
+	struct symbol *sym1, *sym2, *sym3;
+};
+
+struct quadrupleList
+{
+	struct quadruple quad;
+	struct quadrupleList *next;
+};
+
+/*************************************/
 
 /* Function prototypes to build an AST */
 
@@ -362,7 +378,11 @@ struct ast* newtype(int type);
  * @todo: fix tree problems 
  *
 */
+
+struct quadrupleList *quadList;
+struct symlist *stack;
 void generateInterCode(struct ast *a);
+void printInterCode();
 
 
 #endif

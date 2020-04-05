@@ -1,1 +1,3 @@
-7: semantic error: Redeclaration of variable: k
+TAHTAHTA
+TAHTAHTA
+TAHTAHTA

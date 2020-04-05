@@ -381,6 +381,7 @@ void insertnode(struct ast *a)
 			{
 				/* we now look for the arguments */
 				struct symbol *function = searchSym(sym);
+				printf("TAHTAHTA\n");
 				//printf("$$$%d\n",((struct fndef*)(sym->father->func))->ret );
 			
 				function->syms = newsymlist(sym, function->syms);
@@ -613,6 +614,11 @@ void createSymTabRec(struct ast *ast)
 void createSymTab(struct ast *ast)
 {
 	int i;
+	struct symbol *input, *output;
+	input = createsymbol("input");
+	input->type = 260;
+	output = createsymbol("output");
+	output->type = 260;
 	for(i = 0; i < NHASH; i++)
 	{
 		symtab[i] = (struct symlist*)malloc(sizeof(struct symlist));
@@ -621,6 +627,8 @@ void createSymTab(struct ast *ast)
 		symtab[i]->next = NULL;
 	}
 	current_function = NULL;
+	insertSymbol(input);
+	insertSymbol(output);
 	createSymTabRec(ast);
 	struct symlist *sl;
 	for(i = 0;i < NHASH;i++)
@@ -1239,243 +1247,320 @@ char* op(int type)
 	return s;
 }
 
-/* We should rewrite our tree, with the three adress notation */
+/************************************************************
+*             INTERMEDIATE CODE GENERATOR                   *
+************************************************************/
 
-void threeArgs(struct ast *a)
+struct symlist* createSymStack()
 {
-	/* we should save left and right children */
-	struct ast *left;
-	struct ast *right;
-	left = a->left;
-	right = a->right;
-	//printf("%c \n",a->nodetype);
-	if(left != NULL) 
+	struct symlist *stack;
+	stack = (struct symlist*)malloc(sizeof(struct symlist));
+	if(stack != NULL)
 	{
-		if(!valid(left->nodetype)) left = NULL; 	
+		stack->sym = NULL;
+		stack->next = NULL;
+		return stack;
 	}
-	if(right != NULL)
-	{
-		if(!valid(right->nodetype)) right = NULL;
-	}
-	struct ast *newNode;
-	struct ast *aux;
-	//aux = (struct ast*)malloc(sizeof(struct ast));
+	return NULL;
+}
+
+void push(struct symbol *sym)
+{
 	struct symlist *new;
-	new = (struct symlist*)malloc(sizeof(struct symlist));
-	// new->sym = (struct symbol*)malloc(3 * sizeof(struct symbol));
-	
-	char *s;
-	char *t;
-	struct symbol *sym;	
-	switch(a->nodetype)
+	new = createSymStack();
+	new->sym = sym;
+	new->next = stack;
+	stack = new;
+}
+
+struct symbol* pop()
+{
+	struct symlist *aux;
+	aux = stack;
+	stack = stack->next;
+	aux->next = NULL;
+	return aux->sym;
+}
+
+struct quadrupleList* newQuadruple(struct ast *a)
+{
+	struct quadrupleList *new;
+	struct symbol *temp_sym, *foundSym;
+	char *s, *t;
+	new = (struct quadrupleList*)malloc(sizeof(struct quadrupleList));
+	if(new != NULL)
 	{
-		case '+': case '-': case '*': case '/':
-		case '1': case '2': case '3': case '4':
-		case '5': case '6': case '=':
-			new->sym = triple();
-		//	printf("\t>> %c %c\n",left->nodetype,right->nodetype);
-			new->sym[1].type = a->nodetype;
-			new->sym[1].name = op(a->nodetype);
-			//if(left != NULL) printf(">>%d %d\n",a->nodetype,left->nodetype);
-			if(left != NULL && left->nodetype == 'N'){
-				new->sym[2] = *(((struct symref*)(a->left))->sym);
-				new->sym[2].name = ((struct symref*)(a->left))->sym->name;
-			}
-			else if(left != NULL)
-			{
-				new->sym[3].name = op(left->nodetype);
-			}
-
-			if(right != NULL && right->nodetype == 'N'){
-				new->sym[3] = *(((struct symref*)(a->right))->sym);
- 			    new->sym[3].name = ((struct symref*)(a->right))->sym->name;
-			}
-			else if(right != NULL)
-			{
-				new->sym[3].name = op(right->nodetype);
-			}
-			new->next = stack;
-			stack = new;
-
-
-			break;
-
-		case 'K':
-			new->sym = triple(); /* allocate new triple */
-			//s = itoa(((struct numval*)a)->number,10); /* create a random number */
-			s = strdup("\0");
-			s = itoa(++nameNumber,10);
-			//printf("%s\n",s);
-			t = strdup("t");
-
-			sym = createsymbol(strcat(t,s));
-			//sym = createsymbol("num"); /* convertion int to string */
-			sym->value = ((struct numval*)a)->number; /* extract the number to the new symbol */
-			(new->sym[1]) = *(sym); /* associate the symbol to thw first position of the triple */
-			new->sym[2].name = "value";
-			new->sym[2].value = sym->value;
-			new->next = stack; /* put into the stack */
-			stack = new;
-
-			/* create a new node */
-			newNode = newref(sym,NULL,NULL);
-			newNode->nodetype = 'N';
-			//newNode->left = left;
-			//newNode->right = right;
-			*a = *newNode;
-			break;
-
-		case 259: case 260: case 'L':
-			break;
-
-		case 'N':
-			/* if it is not an array, we don't have to do nothing */
-			if(((struct symref*)a)->sym->value != -1)
-			{
-				new->sym = triple();
-				new->sym[1] = *(createsymbol("param"));
-				new->sym[2] = *(((struct symref*)a)->sym);
-				new->next = stack;
-				stack = new;
-			}
-
-			break;
-
-		case 'F':
-			
-			new->sym = triple();
-			new->sym[0] = *(((struct fndef*)a)->sym);
-		    new->sym[1].name = strdup("\0");
-			new->sym[2].name = strdup("\0");
-			new->sym[3].name = strdup("\0");
-			
-			new->next = stack;
-			stack = new;
-			break;
-
-		case 'R':
-			new->sym = triple();
-			if(a->right != NULL)
-			{
-				new->sym[1] = *(createsymbol("return"));
-				new->sym[2] = *(((struct symref*)(a->right))->sym);		
-			} 
-			else new->sym[1] = *(createsymbol("void"));
-			
-			new->next = stack;
-				stack = new;
-			break;
-
-		case 'W':
-			new->sym = triple();
-			new->sym[0] = *(createsymbol("while"));
-			sym = createsymbol("cond");
-			newNode = newref(sym,NULL,NULL);
-			new->sym[2] = *sym;
-
-			new->sym[1].name = "BEZ";
-			new->sym[3].name = "W2";
-
-			
-			newNode->nodetype = 'N';
-			// newNode->left = a->left;
-			// a->left = newNode;
-
-			// newNode->right = NULL;
-			
-
-			// aux = newref(createsymbol("aux"),NULL,NULL);
-			// *aux = *a;
-			// *a = *newNode;
-			// // aux->left = left;
-			// aux->right = right;
-			// a->left = aux;
-			// a->right = NULL;
-
-			new->next = stack;
-			stack = new;
+		new->quad.sym1 = NULL;
+		new->quad.sym2 = NULL;
+		new->quad.sym3 = NULL;
 		
-		default:
-			break;
+		/* creating the head quadruple */
+		if(a == NULL)
+		{
+			new->quad.op = -1;
+			return new;
+		}
+
+		/* creating a quadruple for the node a */
+		new->quad.op = a->nodetype;
+
+		switch(a->nodetype)
+		{
+			case 'K': /* constant */ 
+				printf("%d",((struct numval *)a)->number);
+				break;
+
+			case 'R':
+				printf("return");
+				break;
+			
+			case 'N': /* name reference */
+				if(((struct symref*)a)->sym->type == 259) /* variable declaration */
+				{
+					new->quad.sym1 = ((struct symref*)a)->sym;
+					new->quad.sym2 = ((struct fndef*)(((struct symref*)a)->sym->func))->sym;			
+				}
+				else /* variable use */
+				{
+					s = strdup("\0");
+					s = itoa(++nameNumber,10);
+					t = strdup("t");
+					temp_sym = createsymbol(strcat(t,s));
+					foundSym = searchSym(((struct symref*)a)->sym);
+					temp_sym->father = foundSym;
+					foundSym->father = temp_sym;
+					new->quad.sym1 = temp_sym;
+					new->quad.sym2 = foundSym;
+					push(temp_sym);
+				}
+
+				break;
+			
+			case '=': /* assignment */
+				new->quad.sym1 = searchSym((((struct symasgn*)a)->symref)->sym);
+				//new->quad.sym1 = new->quad.sym1->father;
+				/* gambiarra */
+				// s = strdup("\0");
+				// s = itoa(nameNumber,10);
+				// t = strdup("t");
+				// temp_sym = createsymbol(strcat(t,s));	
+				new->quad.sym2 = pop();
+				new->quad.sym1 = pop();
+				/* acaba a gambiarra */
+
+
+
+				break;
+
+			/* expressions */
+			case '+': 
+				s = strdup("\0");
+				s = itoa(++nameNumber,10);
+				t = strdup("t");
+				temp_sym = createsymbol(strcat(t,s));	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop();
+				new->quad.sym2 = pop();
+				push(temp_sym);
+								
+
+				break;
+			case '-': 
+				printf("-"); 
+				break;
+			case '*': 
+				printf("*"); 
+				break;
+			case '/': 
+				printf("/"); 
+				break;
+			
+			/* comparisons */
+			case '1': 
+				printf(">");
+				break;
+			case '2': 
+				printf("<");
+				break;
+			case '3': 
+				printf("!=");
+				break;
+			case '4': 
+				printf("==");
+				break;
+			case '5': 
+				printf(">=");
+				break;
+			case '6':
+				 printf("<=");
+				break;
+			
+			/* control flow */
+			/* null expressions allowed in the grammar, so check for them */
+			/* if/then/else */
+			case 'I':
+				printf("if");
+				break;
+			
+			/* while/do */
+			case 'W':
+				printf("while");
+				break; /* value of last statement is value of while/do */
+
+			/* list of statements */
+			case 'L': 
+				break;
+			
+			case 'F': 
+				new->quad.sym1 = ((struct fndef*)a)->sym;		
+				break;
+			
+			case 'C':
+				s = strdup("\0");
+				s = itoa(++nameNumber,10);
+				t = strdup("t");
+				temp_sym = createsymbol(strcat(t,s));
+				temp_sym->father = ((struct fncall*)a)->sym;
+				push(temp_sym);
+				foundSym = searchSym(((struct fncall*)a)->sym);
+				foundSym->father = temp_sym;
+				new->quad.sym1 = temp_sym;
+				new->quad.sym2 = ((struct fncall*)a)->sym;
+				break;
+			case 259:
+				break;
+			case 260:
+				break;
+			case 0:
+				break;
+			default: 
+				printf("internal error: bad node %c\n", a->nodetype);
+				a->left = NULL;
+				a->right = NULL;
+		}
+
+
+		return new;
+	}
+	return NULL;
+}
+
+void addQuadruple(struct ast *a)
+{
+	struct quadrupleList *newQuad,*aux;
+	newQuad = newQuadruple(a);
+	if(a->nodetype == 'L' || a->nodetype == 260 || a->nodetype == 259) return;
+	newQuad->quad.op = a->nodetype;
+	aux = quadList;
+	while(aux->next != NULL)
+	{
+		aux = aux->next;
+	}
+	aux->next = newQuad;
+}
+
+int isSymmetric(int type)
+{
+	switch(type)
+	{
+		case '=': case '+': case '-' :case '*':
+		case '/': case '1': case '2': case '3':
+		case '4': case '5': case '6': case 'C':
+			return 1;
+		default: return 0; 
 	}
 }
 
 
 
-
-/* post order */
-void generate(struct ast *a)
+void generateInterCodeRecPreOrder(struct ast *a)
 {
 	if(a != NULL && valid(a->nodetype))
 	{
-		if(a->right != NULL)
-			generate(a->right);
-		if(a->left != NULL)
-			generate(a->left);
-		//printf("\tB:%c\n",a->nodetype);
-		threeArgs(a);
-		//printf("\tA:%c\n",a->nodetype );
+		if(!isSymmetric(a->nodetype))
+		{
+			addQuadruple(a);
+			if(a->left != NULL)
+			{
+				generateInterCodeRecPreOrder(a->left);
+			}
+			if(a->right != NULL)
+			{
+				generateInterCodeRecPreOrder(a->right);
+			}	
+		}
+		else
+		{
+			if(a->left != NULL)
+			{
+				generateInterCodeRecPreOrder(a->left);
+			}
+			if(a->right != NULL)
+			{
+				generateInterCodeRecPreOrder(a->right);
+			}
+			addQuadruple(a);
+		}	
 	}
-}
-
-void printStack()
-{
-	struct symlist *top;
-	top = stack;
-	printf("\n\n");
-	printf("|-------------------------------------------------------|\n");
-	printf("|                  Three Address Code                   |\n");
-	printf("|-------------------------------------------------------|\n");
-	printf("|    Label    |      Op     |    Arg 1    |    Arg2     |\n");
-	printf("|-------------------------------------------------------|\n");
-	
-
-	while(top->next != NULL)
-	{
-		if(top->sym[0].name) /* it will print just if it has a function or procedute label */
-		{
-			printf("|%11s: ",top->sym[0].name); 
-			//top = top->next;
-		}else{
-			printf("|\t      ");
-		}
-
-		if(top->sym[1].name) /* it will print all operations */
-		{
-			printf("|%13s",top->sym[1].name);
-		}else
-		{
-			printf("|\t\t    ");
-		}
-
-		if(top->sym[2].name) /* it can print variables or values */
-		{
-			if(!strcmp(top->sym[2].name,"value")) printf("|%13d",top->sym[2].value);
-
-			else printf("|%13s",top->sym[2].name);
-		}else
-		{
-			printf("|\t\t    ");
-		}
-
-		if(top->sym[3].name)
-		{
-			printf("|%13s|\n",top->sym[3].name);
-		}
-		else{
-			printf("|\t\t|\n");
-		}
-		top = top->next;
-	}
-	printf("|-------------------------------------------------------|\n");
-
 }
 
 void generateInterCode(struct ast *a)
 {
-	stack = (struct symlist*)malloc(sizeof(struct symlist));
-	stack->sym = triple();
-	stack->next = NULL;
-	generate(a);
-	printStack();
+	/* initialize the list */
+	quadList = newQuadruple(NULL);
+	stack = createSymStack();
+	stack->sym = createsymbol("HEAD");
+	stack->sym->value = -1;
+	generateInterCodeRecPreOrder(a);
+}
+
+
+void printQuadruple(struct quadruple quad)
+{
+	char *s,*t;
+	switch(quad.op)
+	{
+		case -1: break;
+		case 'F':
+			printf("(FUN,");
+			if(quad.sym1->type == 259) printf("INT,");
+			else printf("VOID,");
+			printf("%s,-)\n",quad.sym1->name);
+			break;
+		case 'N':
+			/* it is a variable declaration */
+			if(quad.sym1->type == 259) printf("(ALLOC,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			/* it is a variable first use */
+			else printf("(LOAD,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			break;
+		case 'C':
+			printf("(CALL,%s,%s,",quad.sym1->name,quad.sym2->name);
+			if(!strcmp(quad.sym2->name,"input")) printf("0)\n");
+			else if(!strcmp(quad.sym2->name,"output")) printf("1)\n");
+			else printf("%d)",countArgs(searchSym(quad.sym2)->func));
+			break;
+		case '=':
+			printf("(ASSIGN,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			printf("(STORE,%s,%s,-)\n", quad.sym1->name,quad.sym1->father->name);
+			break;
+		case '+':
+			printf("(ADD,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		default:
+			printf("%c\n", quad.op);
+			break;
+	}
+}
+
+void printInterCode()
+{
+	printf("\n\nWe shall start\n\n");
+	
+	struct quadrupleList *aux;
+	aux = quadList;
+	while(aux != NULL)
+	{
+		printQuadruple(aux->quad);
+		aux = aux->next;
+	}
 }

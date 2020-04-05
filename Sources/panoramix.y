@@ -360,8 +360,8 @@ int main(int argc, char **argv)
     close(save_out);
 	
 
-
-	//generateInterCode(tree);	
+    generateInterCode(tree);
+	printInterCode();	
 	//printf("\n\n");
 	//printf("\n\n");
 	//printtree(tree,0);
