@@ -1173,7 +1173,8 @@ struct ast* newtype(int type)
 /***********************************************/
 
 struct symlist *stack;
-char nameNumber = 0;
+char tempNameNumber = 0;
+char labelNameNumber = 0;
 
 /* @function: triple
  * @private 
@@ -1251,7 +1252,7 @@ char* op(int type)
 *             INTERMEDIATE CODE GENERATOR                   *
 ************************************************************/
 
-struct symlist* createSymStack()
+struct symlist* createStack()
 {
 	struct symlist *stack;
 	stack = (struct symlist*)malloc(sizeof(struct symlist));
@@ -1264,29 +1265,74 @@ struct symlist* createSymStack()
 	return NULL;
 }
 
-void push(struct symbol *sym)
+void push_symStack(struct symbol *sym)
 {
 	struct symlist *new;
-	new = createSymStack();
+	new = createStack();
 	new->sym = sym;
-	new->next = stack;
-	stack = new;
+	new->next = symStack;
+	symStack = new;
 }
 
-struct symbol* pop()
+struct symbol* pop_symStack()
 {
 	struct symlist *aux;
-	aux = stack;
-	stack = stack->next;
+	aux = symStack;
+	symStack = symStack->next;
 	aux->next = NULL;
 	return aux->sym;
 }
 
+void push_labelStack(struct symbol *sym)
+{
+	struct symlist *new;
+	new = createStack();
+	new->sym = sym;
+	new->next = labelStack;
+	labelStack = new;
+}
+
+struct symbol* pop_labelStack()
+{
+	struct symlist *aux;
+	aux = labelStack;
+	labelStack = labelStack->next;
+	aux->next = NULL;
+	return aux->sym;
+}
+
+void swap_labelStack()
+{
+	struct symlist *aux;
+	aux = labelStack;
+	labelStack = aux->next;
+	aux->next = labelStack->next;
+	labelStack->next = aux;
+}
+
+char* tempName()
+{
+	char *s, *t;
+	s = strdup("\0");
+	s = itoa(++tempNameNumber,10);
+	t = strdup("t");
+	return strcat(t,s);				
+}
+
+char* labelName()
+{
+	char *s, *L;
+	s = strdup("\0");
+	s = itoa(++labelNameNumber,10);
+	L = strdup("L");
+	return strcat(L,s);				
+}
+
+
 struct quadrupleList* newQuadruple(struct ast *a)
 {
-	struct quadrupleList *new;
-	struct symbol *temp_sym, *foundSym;
-	char *s, *t;
+	struct quadrupleList *new,*aux;
+	struct symbol *temp_sym, *foundSym, *label_sym;
 	new = (struct quadrupleList*)malloc(sizeof(struct quadrupleList));
 	if(new != NULL)
 	{
@@ -1307,7 +1353,8 @@ struct quadrupleList* newQuadruple(struct ast *a)
 		switch(a->nodetype)
 		{
 			case 'K': /* constant */ 
-				printf("%d",((struct numval *)a)->number);
+				temp_sym = createsymbol(itoa(((struct numval *)a)->number,10));
+				push_symStack(temp_sym);
 				break;
 
 			case 'R':
@@ -1322,91 +1369,132 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				}
 				else /* variable use */
 				{
-					s = strdup("\0");
-					s = itoa(++nameNumber,10);
-					t = strdup("t");
-					temp_sym = createsymbol(strcat(t,s));
+					temp_sym = createsymbol(tempName());
 					foundSym = searchSym(((struct symref*)a)->sym);
 					temp_sym->father = foundSym;
 					foundSym->father = temp_sym;
 					new->quad.sym1 = temp_sym;
 					new->quad.sym2 = foundSym;
-					push(temp_sym);
+					push_symStack(temp_sym);
 				}
 
 				break;
 			
 			case '=': /* assignment */
 				new->quad.sym1 = searchSym((((struct symasgn*)a)->symref)->sym);
-				//new->quad.sym1 = new->quad.sym1->father;
-				/* gambiarra */
-				// s = strdup("\0");
-				// s = itoa(nameNumber,10);
-				// t = strdup("t");
-				// temp_sym = createsymbol(strcat(t,s));	
-				new->quad.sym2 = pop();
-				new->quad.sym1 = pop();
-				/* acaba a gambiarra */
-
-
-
+				new->quad.sym2 = pop_symStack();
+				new->quad.sym1 = pop_symStack();
 				break;
 
 			/* expressions */
 			case '+': 
-				s = strdup("\0");
-				s = itoa(++nameNumber,10);
-				t = strdup("t");
-				temp_sym = createsymbol(strcat(t,s));	
+				temp_sym = createsymbol(tempName());	
 				new->quad.sym1 = temp_sym;
-				new->quad.sym3 = pop();
-				new->quad.sym2 = pop();
-				push(temp_sym);
-								
-
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '-': 
-				printf("-"); 
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '*': 
-				printf("*"); 
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '/': 
-				printf("/"); 
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			
 			/* comparisons */
 			case '1': 
-				printf(">");
+				//printf(">");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '2': 
-				printf("<");
+				//printf("<");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '3': 
-				printf("!=");
+				//printf("!=");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '4': 
-				printf("==");
+				//printf("==");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '5': 
-				printf(">=");
+				//printf(">=");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
 			case '6':
-				 printf("<=");
+				//printf("<=");
+				temp_sym = createsymbol(tempName());	
+				new->quad.sym1 = temp_sym;
+				new->quad.sym3 = pop_symStack();
+				new->quad.sym2 = pop_symStack();
+				push_symStack(temp_sym);
 				break;
-			
 			/* control flow */
 			/* null expressions allowed in the grammar, so check for them */
 			/* if/then/else */
-			case 'I':
-				printf("if");
+			case 'Z':
+				label_sym = createsymbol(labelName());
+				new->quad.sym2 = label_sym;
+				push_labelStack(label_sym);
+				swap_labelStack();
+				new->quad.sym1 = pop_symStack();
 				break;
-			
+			case 'I':
+				label_sym = createsymbol(labelName());
+				new->quad.sym2 = label_sym;
+				push_labelStack(label_sym);
+				new->quad.sym1 = pop_symStack();
+				break;
 			/* while/do */
 			case 'W':
-				printf("while");
+				label_sym = createsymbol(labelName());
+				push_labelStack(label_sym);
+				new->quad.sym1 = label_sym;
 				break; /* value of last statement is value of while/do */
-
+			case 'G':
+				label_sym = pop_labelStack();
+				new->quad.sym1 = label_sym;
+				break;
+			case 'A':
+				label_sym = pop_labelStack();
+				new->quad.sym1 = label_sym;
+				break;
 			/* list of statements */
 			case 'L': 
 				break;
@@ -1416,12 +1504,9 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				break;
 			
 			case 'C':
-				s = strdup("\0");
-				s = itoa(++nameNumber,10);
-				t = strdup("t");
-				temp_sym = createsymbol(strcat(t,s));
+				temp_sym = createsymbol(tempName());
 				temp_sym->father = ((struct fncall*)a)->sym;
-				push(temp_sym);
+				push_symStack(temp_sym);
 				foundSym = searchSym(((struct fncall*)a)->sym);
 				foundSym->father = temp_sym;
 				new->quad.sym1 = temp_sym;
@@ -1448,7 +1533,9 @@ struct quadrupleList* newQuadruple(struct ast *a)
 void addQuadruple(struct ast *a)
 {
 	struct quadrupleList *newQuad,*aux;
-	newQuad = newQuadruple(a);
+	//if(a->nodetype == 'I' || a->nodetype == 'W') newQuad = newFlowQuadruple(a);
+	//else 
+		newQuad = newQuadruple(a);
 	if(a->nodetype == 'L' || a->nodetype == 260 || a->nodetype == 259) return;
 	newQuad->quad.op = a->nodetype;
 	aux = quadList;
@@ -1477,7 +1564,25 @@ void generateInterCodeRecPreOrder(struct ast *a)
 {
 	if(a != NULL && valid(a->nodetype))
 	{
-		if(!isSymmetric(a->nodetype))
+		if(a->nodetype == 'I' || a->nodetype == 'W') // flow quadruple
+		{
+			addQuadruple(a);
+			if(a->left != NULL)
+			{
+				generateInterCodeRecPreOrder(a->left);
+			}
+			a->nodetype = 'Z';
+			addQuadruple(a);
+			if(a->right != NULL)
+			{
+				generateInterCodeRecPreOrder(a->right);
+			}
+			a->nodetype = 'G';
+			addQuadruple(a);
+			a->nodetype = 'A';
+			addQuadruple(a);	
+		}
+		else if(!isSymmetric(a->nodetype))
 		{
 			addQuadruple(a);
 			if(a->left != NULL)
@@ -1508,9 +1613,12 @@ void generateInterCode(struct ast *a)
 {
 	/* initialize the list */
 	quadList = newQuadruple(NULL);
-	stack = createSymStack();
-	stack->sym = createsymbol("HEAD");
-	stack->sym->value = -1;
+	symStack = createStack();
+	symStack->sym = createsymbol("HEAD");
+	symStack->sym->value = -1;
+	labelStack = createStack();
+	labelStack->sym = createsymbol("HEAD");
+	labelStack->sym->value = -1;
 	generateInterCodeRecPreOrder(a);
 }
 
@@ -1546,6 +1654,50 @@ void printQuadruple(struct quadruple quad)
 		case '+':
 			printf("(ADD,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
 			break;
+		case '-':
+			printf("(SUB,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '*':
+			printf("(MULT,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '/':
+			printf("(DIV,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '1': // '>'
+			printf("(GT,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '2': // '<' 
+			printf("(LT,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '3': // '!='
+			printf("(NEQ,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '4': // '==' 
+			printf("(EQ,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '5': // '>='
+			printf("(GEQ,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case '6': // '<='
+			printf("(LEQ,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
+			break;
+		case 'K':
+			break;
+		case 'W':
+			printf("(LABEL,%s,-,-)\n",quad.sym1->name);
+			break;
+		case 'G':
+			printf("(GOTO,%s,-,-)\n",quad.sym1->name);
+			break;
+		case 'Z':
+			printf("(IFF,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			break;
+		case 'A':
+			printf("(LABEL,%s,-,-)\n",quad.sym1->name);
+			break;
+		case 'I':
+			printf("(IFF,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			break;
 		default:
 			printf("%c\n", quad.op);
 			break;
@@ -1563,4 +1715,5 @@ void printInterCode()
 		printQuadruple(aux->quad);
 		aux = aux->next;
 	}
+	printf("\n\n");
 }

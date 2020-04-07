@@ -380,8 +380,10 @@ struct ast* newtype(int type);
 */
 
 struct quadrupleList *quadList;
-struct symlist *stack;
+struct symlist *symStack;
+struct symlist *labelStack;
 void generateInterCode(struct ast *a);
+void generateInterCodeRecPreOrder(struct ast *a);
 void printInterCode();
 
 
