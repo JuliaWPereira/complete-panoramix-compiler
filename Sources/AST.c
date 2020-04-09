@@ -1495,6 +1495,14 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				label_sym = pop_labelStack();
 				new->quad.sym1 = label_sym;
 				break;
+			case 'E':
+				label_sym = createsymbol(labelName());
+				new->quad.sym1 = label_sym;
+				push_labelStack(label_sym);
+				//label_sym = createsymbol(labelName());
+				//push_labelStack(label_sym);
+				swap_labelStack();
+				break;
 			/* list of statements */
 			case 'L': 
 				break;
@@ -1564,7 +1572,7 @@ void generateInterCodeRecPreOrder(struct ast *a)
 {
 	if(a != NULL && valid(a->nodetype))
 	{
-		if(a->nodetype == 'I' || a->nodetype == 'W') // flow quadruple
+		if(a->nodetype == 'W') // while
 		{
 			addQuadruple(a);
 			if(a->left != NULL)
@@ -1581,6 +1589,28 @@ void generateInterCodeRecPreOrder(struct ast *a)
 			addQuadruple(a);
 			a->nodetype = 'A';
 			addQuadruple(a);	
+		}
+		else if(a->nodetype == 'I')
+		{
+			if(((struct flow*)a)->condition != NULL)
+			{
+				generateInterCodeRecPreOrder(((struct flow*)a)->condition);
+			}
+			addQuadruple(a);
+			if(((struct flow*)a)->then_list != NULL)
+			{
+				generateInterCodeRecPreOrder(((struct flow*)a)->then_list);
+			}
+			if(((struct flow*)a)->else_list != NULL)
+			{
+			    a->nodetype = 'E';
+				addQuadruple(a);
+				a->nodetype = 'A';
+				addQuadruple(a);
+				generateInterCodeRecPreOrder(((struct flow*)a)->else_list);
+			}
+			a->nodetype = 'A';
+			addQuadruple(a);
 		}
 		else if(!isSymmetric(a->nodetype))
 		{
@@ -1697,6 +1727,9 @@ void printQuadruple(struct quadruple quad)
 			break;
 		case 'I':
 			printf("(IFF,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			break;
+		case 'E':
+			printf("(GOTO,%s,-,-)\n",quad.sym1->name);
 			break;
 		default:
 			printf("%c\n", quad.op);

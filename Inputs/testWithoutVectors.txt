@@ -1,0 +1,17 @@
+void main(void)
+{
+	int i;int vet;
+	i = 0;
+	while (i < 10){
+		vet = input();
+		i = i + 1;
+	}
+	i = input(vet,0,10);
+	i = 0;
+	while (i < 10){
+		output(vet);
+		i = i + 1;
+	}
+}
+
+			

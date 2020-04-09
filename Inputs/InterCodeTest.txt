@@ -1,9 +1,26 @@
 void main(void)
 {
-	int x; int y;
-	x = input();
-	y = input();
-	output(x + y);
+	int x; int y; int z;
+	x = 1;
+	y = 2;
+	z = 3;
+	if(x >= 1)
+	{
+		while(y == 2)
+		{
+			if(z == 3)
+			{
+				x = y + z;
+			}
+			else
+			{
+				x = y - z;
+			}
+			y = y + 1;
+		}
+	}
+	else
+	{
+		x = y * z;
+	}
 }
-
-			
