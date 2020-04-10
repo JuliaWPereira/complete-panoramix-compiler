@@ -1,3 +1,15 @@
+int gcd(int u, int v)
+{
+	if(v == 0)
+	{
+		return u;
+	}
+	else
+	{
+		return gcd(v,u-v);
+	}
+}
+
 void main(void)
 {
 	int x; int y; int z;
@@ -6,18 +18,7 @@ void main(void)
 	z = 3;
 	if(x >= 1)
 	{
-		while(y == 2)
-		{
-			if(z == 3)
-			{
-				x = y + z;
-			}
-			else
-			{
-				x = y - z;
-			}
-			y = y + 1;
-		}
+		x = gcd(y,z);
 	}
 	else
 	{

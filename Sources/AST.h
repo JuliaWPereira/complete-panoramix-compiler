@@ -382,6 +382,8 @@ struct ast* newtype(int type);
 struct quadrupleList *quadList;
 struct symlist *symStack;
 struct symlist *labelStack;
+struct symlist *argList;
+
 void generateInterCode(struct ast *a);
 void generateInterCodeRecPreOrder(struct ast *a);
 void printInterCode();
