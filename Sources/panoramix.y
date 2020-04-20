@@ -321,7 +321,7 @@ arg_list: arg_list ',' exp
 int main(int argc, char **argv)
 {
 	/* Create AST and print logs into a file */
-	int out = open("analysis.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+	int out = open("analysis.txt", O_RDWR|O_CREAT, 0600);
     if (-1 == out) { perror("opening symtab.txt"); return 255; }
 	int save_out = dup(fileno(stdout));
     if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
@@ -334,7 +334,7 @@ int main(int argc, char **argv)
     close(save_out);
 
     /* Print Symbol Table */
-	out = open("symtable.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+	out = open("symtable.txt", O_RDWR|O_CREAT, 0600);
     if (-1 == out) { perror("opening symtable.txt"); return 255; }
 	save_out = dup(fileno(stdout));
     if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
@@ -346,8 +346,8 @@ int main(int argc, char **argv)
     close(save_out);
 
 
-    /* Print Symbol Table */
-	out = open("ast.txt", O_RDWR|O_CREAT|O_APPEND, 0600);
+    /* Print AST Table */
+	out = open("ast.txt", O_RDWR|O_CREAT, 0600);
     if (-1 == out) { perror("opening ast.txt"); return 255; }
 	save_out = dup(fileno(stdout));
     if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
@@ -359,15 +359,17 @@ int main(int argc, char **argv)
     dup2(save_out, fileno(stdout));
     close(save_out);
 	
-
+	/* Print Intermediate Code */
+	out = open("interCode.txt", O_RDWR|O_CREAT, 0600);
+    if (-1 == out) { perror("opening interCode.txt"); return 255; }
+	save_out = dup(fileno(stdout));
+    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
+    
     generateInterCode(tree);
 	printInterCode();	
-	//printf("\n\n");
-	//printf("\n\n");
-	//printtree(tree,0);
 	
-
-
-    
-    
+	fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
+	
 }

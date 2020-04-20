@@ -385,7 +385,7 @@ struct symlist *labelStack;
 struct symlist *argList;
 
 void generateInterCode(struct ast *a);
-void generateInterCodeRecPreOrder(struct ast *a);
+void generateInterCodeRecursive(struct ast *a);
 void printInterCode();
 
 

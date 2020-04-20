@@ -1178,23 +1178,6 @@ char tempNameNumber = 0;
 char labelNameNumber = 0;
 char paramsNumber = 0;
 
-/* @function: triple
- * @private 
- *
- * creates a symlist vector.
- * 
- * @param {int} type: which type.
- *
- * @returns {struct symbol*} triple 
-*/
-
-struct symbol* triple()
-{
-	struct symbol *s;
-	s = (struct symbol*)malloc(4 * sizeof(struct symbol));
-	return s;
-}
-
 /* @function: itoa
  * @private 
  *
@@ -1219,36 +1202,6 @@ char* itoa(int val, int base){
 	
 	return &buf[i+1];
 	
-}
-
-/* @function: op
- * @private 
- *
- * turn the operator to a string name.
- * 
- * @param {int} type: which type.
- *
- * @returns {char*} name 
-*/
-
-char* op(int type)
-{
-	char *s;
-	switch(type)
-	{
-		case '+': s = "+"; break;  
-		case '-': s = "-"; break;
-		case '*': s = "*"; break;
-		case '/': s = "/"; break;
-		case '1': s = ">"; break;
-		case '2': s = "<"; break;
-		case '3': s = "!="; break;
-		case '4': s = "=="; break;
-		case '5': s = ">="; break;
-		case '6': s = "<="; break;
-		case '=': s = "="; break;
-	}
-	return s;
 }
 
 /************************************************************
@@ -1337,7 +1290,6 @@ void addArgList(struct symbol *sym)
 	aux->next = new;
 }
 
-
 char* tempName()
 {
 	char *s, *t;
@@ -1418,10 +1370,8 @@ struct quadrupleList* newQuadruple(struct ast *a)
 					foundSym->father = temp_sym;
 					new->quad.sym1 = temp_sym;
 					new->quad.sym2 = foundSym;
-					printf("%s - %d\n",new->quad.sym2->name, foundSym->length );
 					if(foundSym->length != 0)
 					{
-						printf("AQUI\n");
 						new->quad.sym3 = pop_symStack();
 					}
 					push_symStack(temp_sym);
@@ -1548,8 +1498,6 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				label_sym = createsymbol(labelName());
 				new->quad.sym1 = label_sym;
 				push_labelStack(label_sym);
-				//label_sym = createsymbol(labelName());
-				//push_labelStack(label_sym);
 				swap_labelStack();
 				break;
 			/* list of statements */
@@ -1567,7 +1515,6 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				push_symStack(temp_sym);
 				foundSym = searchSym(((struct fncall*)a)->sym);
 				if(foundSym != NULL) foundSym->father = temp_sym;
-				else printf("TODO MUNDO NULL\n");
 				new->quad.sym1 = temp_sym;
 				new->quad.sym2 = ((struct fncall*)a)->sym;
 				new->quad.sym3 = createsymbol(nParamName());
@@ -1605,8 +1552,8 @@ struct quadrupleList* newQuadruple(struct ast *a)
 void addQuadruple(struct ast *a)
 {
 	struct quadrupleList *newQuad,*aux;
+	if(a->nodetype == 'L' || a->nodetype == 260 || a->nodetype == 259) return; /* nodes that should be ignored*/
 	newQuad = newQuadruple(a);
-	if(a->nodetype == 'L' || a->nodetype == 260 || a->nodetype == 259) return;
 	newQuad->quad.op = a->nodetype;
 	aux = quadList;
 	while(aux->next != NULL)
@@ -1685,7 +1632,7 @@ void generateInterCodeCalls(struct ast *a)
 	}
 	if(a->right != NULL && valid(a->nodetype))
 	{
-		generateInterCodeRecPreOrder(a->right);
+		generateInterCodeRecursive(a->right);
 		a->nodetype = 'B';
 		addQuadruple(a);
 		++paramsNumber;	
@@ -1703,7 +1650,7 @@ void generateInterCodeDef(struct ast *a)
 }
 
 
-void generateInterCodeRecPreOrder(struct ast *a)
+void generateInterCodeRecursive(struct ast *a)
 {
 	if(a != NULL && valid(a->nodetype))
 	{
@@ -1712,13 +1659,13 @@ void generateInterCodeRecPreOrder(struct ast *a)
 			addQuadruple(a);
 			if(a->left != NULL)
 			{
-				generateInterCodeRecPreOrder(a->left);
+				generateInterCodeRecursive(a->left);
 			}
 			a->nodetype = 'Z';
 			addQuadruple(a);
 			if(a->right != NULL)
 			{
-				generateInterCodeRecPreOrder(a->right);
+				generateInterCodeRecursive(a->right);
 			}
 			a->nodetype = 'G';
 			addQuadruple(a);
@@ -1729,12 +1676,12 @@ void generateInterCodeRecPreOrder(struct ast *a)
 		{
 			if(((struct flow*)a)->condition != NULL)
 			{
-				generateInterCodeRecPreOrder(((struct flow*)a)->condition);
+				generateInterCodeRecursive(((struct flow*)a)->condition);
 			}
 			addQuadruple(a);
 			if(((struct flow*)a)->then_list != NULL)
 			{
-				generateInterCodeRecPreOrder(((struct flow*)a)->then_list);
+				generateInterCodeRecursive(((struct flow*)a)->then_list);
 			}
 			if(((struct flow*)a)->else_list != NULL)
 			{
@@ -1742,7 +1689,7 @@ void generateInterCodeRecPreOrder(struct ast *a)
 				addQuadruple(a);
 				a->nodetype = 'A';
 				addQuadruple(a);
-				generateInterCodeRecPreOrder(((struct flow*)a)->else_list);
+				generateInterCodeRecursive(((struct flow*)a)->else_list);
 			}
 			a->nodetype = 'A';
 			addQuadruple(a);
@@ -1761,7 +1708,7 @@ void generateInterCodeRecPreOrder(struct ast *a)
 				}	
 				if(a->right != NULL)
 				{
-					generateInterCodeRecPreOrder(a->right);
+					generateInterCodeRecursive(a->right);
 				}
 				a->nodetype = 'J';
 				addQuadruple(a);
@@ -1770,11 +1717,11 @@ void generateInterCodeRecPreOrder(struct ast *a)
 			{
 				if(a->left != NULL)
 				{
-					generateInterCodeRecPreOrder(a->left);
+					generateInterCodeRecursive(a->left);
 				}
 				if(a->right != NULL)
 				{
-					generateInterCodeRecPreOrder(a->right);
+					generateInterCodeRecursive(a->right);
 				}
 				if(a->nodetype == 'F')
 				{
@@ -1795,11 +1742,11 @@ void generateInterCodeRecPreOrder(struct ast *a)
 			{
 				if(a->left != NULL)
 				{
-					generateInterCodeRecPreOrder(a->left);
+					generateInterCodeRecursive(a->left);
 				}
 				if(a->right != NULL)
 				{
-					generateInterCodeRecPreOrder(a->right);
+					generateInterCodeRecursive(a->right);
 				}
 				addQuadruple(a);
 			}
@@ -1817,7 +1764,7 @@ void generateInterCode(struct ast *a)
 	labelStack = createStack();
 	labelStack->sym = createsymbol("HEAD");
 	labelStack->sym->value = -1;
-	generateInterCodeRecPreOrder(a);
+	generateInterCodeRecursive(a);
 }
 
 
@@ -1930,8 +1877,6 @@ void printQuadruple(struct quadruple quad)
 
 void printInterCode()
 {
-	printf("\n\n");
-	
 	struct quadrupleList *aux;
 	aux = quadList;
 	while(aux != NULL)
@@ -1940,5 +1885,4 @@ void printInterCode()
 		aux = aux->next;
 	}
 	printf("(HALT,-,-,-)\n");
-	printf("\n\n");
 }
