@@ -817,7 +817,7 @@ struct ast* newnum(int i)
 		exit(0);
 	}
 	a->nodetype = 'K'; /* node type for constants */
-	if(i == 0) a->number = -9999;
+	if(i == 0) a->number = 0;
 	else a->number = i;
 	return (struct ast*)a; /* casting to ast pointer */
 }
@@ -1386,7 +1386,6 @@ struct quadrupleList* newQuadruple(struct ast *a)
 
 		/* creating a quadruple for the node a */
 		new->quad.op = a->nodetype;
-
 		switch(a->nodetype)
 		{
 			case 'K': /* constant */ 
@@ -1403,9 +1402,14 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				if(((struct symref*)a)->sym->type == 259) /* variable declaration */
 				{
 					new->quad.sym1 = ((struct symref*)a)->sym;
-					new->quad.sym2 = ((struct fndef*)(((struct symref*)a)->sym->func))->sym;			
-				}
-				
+					if((struct fndef*)(((struct symref*)a)->sym->func) != NULL)
+						new->quad.sym2 = ((struct fndef*)(((struct symref*)a)->sym->func))->sym;			
+					else new->quad.sym2 = createsymbol("GLOBAL");
+					if(new->quad.sym1->length != 0)
+					{
+						new->quad.sym3 = createsymbol(itoa(new->quad.sym1->length,10));
+					}
+				}					
 				else /* variable use */
 				{
 					temp_sym = createsymbol(tempName());
@@ -1414,6 +1418,12 @@ struct quadrupleList* newQuadruple(struct ast *a)
 					foundSym->father = temp_sym;
 					new->quad.sym1 = temp_sym;
 					new->quad.sym2 = foundSym;
+					printf("%s - %d\n",new->quad.sym2->name, foundSym->length );
+					if(foundSym->length != 0)
+					{
+						printf("AQUI\n");
+						new->quad.sym3 = pop_symStack();
+					}
 					push_symStack(temp_sym);
 				}
 
@@ -1556,7 +1566,8 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				temp_sym->father = ((struct fncall*)a)->sym;
 				push_symStack(temp_sym);
 				foundSym = searchSym(((struct fncall*)a)->sym);
-				foundSym->father = temp_sym;
+				if(foundSym != NULL) foundSym->father = temp_sym;
+				else printf("TODO MUNDO NULL\n");
 				new->quad.sym1 = temp_sym;
 				new->quad.sym2 = ((struct fncall*)a)->sym;
 				new->quad.sym3 = createsymbol(nParamName());
@@ -1660,7 +1671,7 @@ int isSymmetric(int type)
 		case '=': case '+': case '-' :case '*':
 		case '/': case '1': case '2': case '3':
 		case '4': case '5': case '6': case 'C':
-			return 1;
+		case 'N': return 1;
 		default: return 0; 
 	}
 }
@@ -1668,14 +1679,17 @@ int isSymmetric(int type)
 
 void generateInterCodeCalls(struct ast *a)
 {
-	if(a->left  != NULL)
+	if(a->left  != NULL && valid(a->nodetype))
 	{
 		generateInterCodeCalls(a->left);
 	}
-	generateInterCodeRecPreOrder(a->right);
-	a->nodetype = 'B';
-	addQuadruple(a);
-	++paramsNumber;
+	if(a->right != NULL && valid(a->nodetype))
+	{
+		generateInterCodeRecPreOrder(a->right);
+		a->nodetype = 'B';
+		addQuadruple(a);
+		++paramsNumber;	
+	}
 }
 
 void generateInterCodeDef(struct ast *a)
@@ -1773,7 +1787,7 @@ void generateInterCodeRecPreOrder(struct ast *a)
 		{	
 			if(a->nodetype == 'C')
 			{
-				generateInterCodeCalls(a->left);
+				if(a->left != NULL)generateInterCodeCalls(a->left);
 				a->nodetype = 'C';
 				addQuadruple(a);	
 			}
@@ -1821,9 +1835,20 @@ void printQuadruple(struct quadruple quad)
 			break;
 		case 'N':
 			/* it is a variable declaration */
-			if(quad.sym1->type == 259) printf("(ALLOC,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
-			/* it is a variable first use */
-			else printf("(LOAD,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
+			if(quad.sym1->type == 259)
+				{
+					printf("(ALLOC,%s,%s,",quad.sym1->name,quad.sym2->name);
+					if(quad.sym3 == NULL) printf("-)\n");
+					else printf("%s)\n",quad.sym3->name);
+				}
+			/* it is a variable use */
+			else 
+			{
+				printf("(LOAD,%s,%s,",quad.sym1->name,quad.sym2->name);
+				if(quad.sym3 != NULL) printf("%s)\n",quad.sym3->name);
+				else printf("-)\n");
+			}
+
 			break;
 		case 'C':
 			printf("(CALL,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);

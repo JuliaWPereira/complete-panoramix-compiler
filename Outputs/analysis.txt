@@ -1,0 +1,1 @@
+26: semantic error: variable at position 1 should be a matrix 

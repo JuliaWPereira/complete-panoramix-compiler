@@ -3,11 +3,15 @@
 |-------------------------------------------------------|
 | identifier | type |      scope |  decl_line | return  |
 |-------------------------------------------------------|
-|          u |int   |        gcd |          1 |    -    |
-|          v |int   |        gcd |          1 |    -    |
-|          x |int   |       main |         15 |    -    |
-|          y |int   |       main |         15 |    -    |
-|          z |int   |       main |         15 |    -    |
-|       main |func  |       main |         13 |   void  |
-|        gcd |func  |        gcd |          1 |   int   |
+|          a |int   |     minloc |          6 |    -    |
+|          i |int   |     minloc |          7 |    -    |
+|          k |int   |     minloc |          7 |    -    |
+|          t |int   |       sort |         25 |    -    |
+|          x |int   |     minloc |          7 |    -    |
+|       sort |func  |       sort |         21 |   void  |
+|     minloc |func  |     minloc |          6 |   int   |
+|       main |func  |       main |         34 |   void  |
+|       high |int   |     minloc |          6 |    -    |
+|        low |int   |     minloc |          6 |    -    |
+|        vet |int[] |     global |          4 |    -    |
 |-------------------------------------------------------|
