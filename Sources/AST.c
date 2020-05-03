@@ -1367,13 +1367,15 @@ struct quadrupleList* newQuadruple(struct ast *a)
 					temp_sym = createsymbol(tempName());
 					foundSym = searchSym(((struct symref*)a)->sym);
 					temp_sym->father = foundSym;
-					foundSym->father = temp_sym;
+					temp_sym->syms = (struct symlist*)malloc(sizeof(struct symlist));
 					new->quad.sym1 = temp_sym;
 					new->quad.sym2 = foundSym;
 					if(foundSym->length != 0)
 					{
 						new->quad.sym3 = pop_symStack();
 					}
+					temp_sym->syms->sym = new->quad.sym3;
+					foundSym->father = new->quad.sym3;
 					push_symStack(temp_sym);
 				}
 
@@ -1383,6 +1385,7 @@ struct quadrupleList* newQuadruple(struct ast *a)
 				new->quad.sym1 = searchSym((((struct symasgn*)a)->symref)->sym);
 				new->quad.sym2 = pop_symStack();
 				new->quad.sym1 = pop_symStack();
+				if(new->quad.sym1->father->length != 0) new->quad.sym3 = new->quad.sym1->syms->sym;
 				break;
 
 			/* expressions */
@@ -1802,7 +1805,9 @@ void printQuadruple(struct quadruple quad)
 			break;
 		case '=':
 			printf("(ASSIGN,%s,%s,-)\n",quad.sym1->name,quad.sym2->name);
-			printf("(STORE,%s,%s,-)\n", quad.sym1->name,quad.sym1->father->name);
+			printf("(STORE,%s,%s,", quad.sym1->name,quad.sym1->father->name);
+			if(quad.sym3 != NULL) printf("%s)\n",quad.sym3->name);
+			else printf("-)\n");
 			break;
 		case '+':
 			printf("(ADD,%s,%s,%s)\n",quad.sym1->name,quad.sym2->name,quad.sym3->name);
