@@ -1204,10 +1204,6 @@ char* itoa(int val, int base){
 	
 }
 
-/************************************************************
-*             INTERMEDIATE CODE GENERATOR                   *
-************************************************************/
-
 struct symlist* createStack()
 {
 	struct symlist *stack;

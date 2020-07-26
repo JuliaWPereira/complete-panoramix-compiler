@@ -6,7 +6,6 @@
  *   @version 1.1.10
  *   @edited December 04, 2019
  *   @author Júlia Wotzasek Pereira
- *	 @author Vinícius juliasse Dantas
  *
 **********************************************/
 

@@ -1,4 +1,4 @@
-INPUT_NAME = InterCodeTest
+INPUT_NAME = testWithoutVectors
 
 all:
 	(cd Sources;make all)
@@ -10,3 +10,4 @@ all:
 	mv interCode.txt ./Outputs/$(INPUT_NAME)/interCode.txt
 	(cd Sources;make clean)
 	
+
