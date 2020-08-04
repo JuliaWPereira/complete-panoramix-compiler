@@ -12,7 +12,7 @@
 #ifndef _AST_H_
 #define _AST_H_
 
-struct memory_table
+struct memoryField
 {
 	char *label; /* label of the variable or function name */ 
 	int type; /* 0 - void; 1 - int; 2 - int[] */
@@ -21,25 +21,39 @@ struct memory_table
 	int memory_size; /* size occupied in bytes (int = 2 bytes (at AsterixForth)) */
 };
 
+struct memoryList
+{
+	struct memoryField mem;
+	struct memoryList *next;
+};
+
+struct assembly_instruction
+{
+	char *operation;
+	char *parameter;
+	int value;
+	int line;
+	int type; /* control - 0; or use - 1*/
+};
+
+typedef struct assembly_code
+{
+	struct assembly_instruction inst;
+	struct assembly_code *next;
+}assembly_code;
+
 int next_free_memory_pos = 0; /* it is an auxiliar variable to allocate memory */
+struct memoryList *begin_memList = NULL;
+struct memoryList *end_memList = NULL;
 
-/*struct quadruple
-{
-	char *op;
-	char *param1, *param2, *param3;
-};
+int assembly_code_line = 0;
+struct assembly_code *begin_assembly = NULL;
+struct assembly_code *end_assembly = NULL;
 
-struct qudrupleList
-{
-	struct quadruple quad;
-	struct quadrupleList *next;
-};
-
-struct quadrupleList *quad_list_begin;
-struct quadrupleList *quad_list_end;
-*/
 
 FILE* assembler(char* intermediate_code_file_name);
-struct quadrupleList* create_quad_list();
+struct memoryList* create_mem_list(char *label, int type, int scope, int first_pos, int memory_size);
+void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3);
+void assembly_FUN(char* arg_1, char* arg_2);
 
 #endif
