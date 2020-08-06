@@ -1,4 +1,4 @@
-INPUT_NAME = testWithoutVectors
+INPUT_NAME = InterCodeTest
 
 all:
 	(cd Sources;make all)

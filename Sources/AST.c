@@ -1290,7 +1290,7 @@ char* tempName()
 {
 	char *s, *t;
 	s = strdup("\0");
-	s = itoa(++tempNameNumber,10);
+	s = itoa(++tempNameNumber%16,10);
 	t = strdup("$t");
 	return strcat(t,s);				
 }

@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "assembler.h" /* header of this file */
 
 struct memoryList* create_mem_list(char *label, int type, int scope, int first_pos, int memory_size)
@@ -100,7 +102,7 @@ void assembly_ALLOC(char* arg_1, char* arg_2, char* arg_3)
 	type = (!strcmp(arg_3, "-") | !strcmp(arg_3, "--"))? 1:2;
 	size = (!strcmp(arg_3, "-") | !strcmp(arg_3, "--"))? 1:string_to_int(arg_3);
 	scope = (!strcmp(arg_2, "GLOBAL"))? 1:0;
-	printf("%d - %s\n", size, arg_3);
+	//printf("%d - %s\n", size, arg_3);
 	new_mem = create_mem_list(arg_1, type, scope, next_free_memory_pos, size * 2);
 
 	if(begin_memList == NULL){
@@ -122,6 +124,7 @@ int get_address(char *label)
 		if(!strcmp(label, aux->mem.label)){
 			return aux->mem.first_pos;
 		}
+		aux = aux->next;
 	}
 	return -1; /* not found */
 }
@@ -139,14 +142,14 @@ void add_assembly(assembly_code *assembly)
 
 void assembly_LOAD(char* arg_1, char* arg_2, char* arg_3)
 {
-	printf("LOAD ,%s ,%s ,%s\n", arg_1, arg_2, arg_3);
+	//printf("LOAD ,%s ,%s ,%s\n", arg_1, arg_2, arg_3);
 	struct memoryList *new_mem;
 	struct assembly_code *assembly;
 	char *s, *t;
 	
 	if(arg_3[0] == '$'){ /* indexed variable */
 		t = strdup("&");	
-		printf(">>%s\n", arg_3);
+		//printf(">>%s\n", arg_3);
 		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 
@@ -185,7 +188,104 @@ void assembly_LOAD(char* arg_1, char* arg_2, char* arg_3)
 		assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}
+}
 
+void assembly_STORE(char* arg_1, char* arg_2)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	t = strdup("&");	
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);		
+}
+
+void assembly_ASSIGN(char* arg_1, char* arg_2)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	t = strdup("&");	
+	assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);	
+}
+
+int get_type(char *label)
+{
+	struct memoryList *aux;
+	aux = begin_memList;
+	while(aux != NULL){
+		if(!strcmp(label, aux->mem.label)){
+			return aux->mem.type;
+		}
+		aux = aux->next;
+	}
+	return -1; /* not found */
+}
+
+void assembly_CALL(char *arg_1, char* arg_2)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	printf(">>%s\n", arg_2);
+
+	if(!strcmp(arg_2,"input")){
+		assembly = create_assembly_code("INPUT READ", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("INPUT LOAD", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+	}else if(!strcmp(arg_2,"output")){
+		assembly = create_assembly_code("OUTPUT SEND", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("OUTPUT PRINT", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+	}else{
+		assembly = create_assembly_code("CALL", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		if(get_type(arg_2) == 1){ /* int function */	
+			t = strdup("&");
+			assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+			add_assembly(assembly);
+
+			assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+			add_assembly(assembly);
+		}
+	}
 }
 
 void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
@@ -201,6 +301,18 @@ void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
 	else if(!(strcmp(operator,"LOAD"))){
 		printf("LOAD\n");
 		assembly_LOAD(arg_1,arg_2,arg_3);
+	}
+	else if(!(strcmp(operator,"STORE"))){
+		printf("STORE\n");
+		assembly_STORE(arg_1,arg_2);
+	}
+	else if(!(strcmp(operator,"ASSIGN"))){
+		printf("ASSIGN\n");
+		assembly_ASSIGN(arg_1,arg_2);
+	}
+	else if(!(strcmp(operator,"CALL"))){
+		printf("CALL\n");
+		assembly_CALL(arg_1,arg_2);
 	}
 }
 
@@ -261,7 +373,7 @@ FILE* assembler(char* intermediate_code_file_name)
 	while (fgets(quadruple, sizeof(quadruple), input_file)) {
     	/* generate the length  of the quadruple */
     	//printf("%s", quadruple); 
-    	printf("quad: %s\n", quadruple);
+    	//printf("quad: %s\n", quadruple);
     	len = strlen(quadruple);
     	strncpy(trim_quadruple,quadruple+1,len);
 		
@@ -269,22 +381,22 @@ FILE* assembler(char* intermediate_code_file_name)
 		trim_quadruple[len-2] = '\0';
 		len = strlen(trim_quadruple);
 		
-		printf("%s\n", trim_quadruple);
+		//printf("%s\n", trim_quadruple);
 		/* get operator */
 		strncpy(operator,strtok (trim_quadruple,","),len);
-		printf("1. %s\n", operator);
+		//printf("1. %s\n", operator);
 		
 		/* get the first argument */
 		strncpy(arg_1, strtok(NULL, ","),len);
-		printf("2. %s\n", arg_1);
+		//printf("2. %s\n", arg_1);
 		
 		/* get the second argument */
 		strncpy(arg_2, strtok(NULL, ","),len);
-		printf("3. %s\n", arg_2);
+		//printf("3. %s\n", arg_2);
 
 		/* get the third argument */
 		strncpy(arg_3, strtok(NULL, ",)"),len);
-		printf("4. %s\n", arg_3);
+		//printf("4. %s\n", arg_3);
 		/* assemble this quadruple and add it at memory, if it is necessary */
 		generate_assembly(operator, arg_1, arg_2, arg_3);
     }
@@ -323,16 +435,13 @@ void printMemTab()
 
 void printAssemblyCode()
 {
-	printf("|-------------------------------------------------------|\n");
-	printf("|                      Assembly Code                    |\n");
-	printf("|-------------------------------------------------------|\n");
 	struct assembly_code *assembly;
 	assembly = begin_assembly;
 	while(assembly != NULL)
 	{
 		//printf("%d\n",assembly->inst.type);
 		if(assembly->inst.type == 1){
-			printf("%3d. %s", assembly->inst.line, assembly->inst.operation);
+			printf("%s", assembly->inst.operation);
 			if(assembly->inst.parameter != NULL){
 				printf(" %s \n", assembly->inst.parameter);
 			}else{
@@ -341,16 +450,33 @@ void printAssemblyCode()
 		}
 		assembly = assembly->next;
 	}
-	printf("|-------------------------------------------------------|\n");
-	
 }
 
 int main(int argc, char **argv)
 {
 	assembler("../Outputs/InterCodeTest/interCode.txt");
+	
+	int out = open("memorytab.txt", O_RDWR|O_CREAT, 0600);
+    if (-1 == out) { perror("opening memorytab.txt"); return 255; }
+	int save_out = dup(fileno(stdout));
+    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
+   
 	printMemTab();
-	printf("\n\n");
+
+	fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
+
+    out = open("assemblyCode.txt", O_RDWR|O_CREAT, 0600);
+    if (-1 == out) { perror("opening assemblyCode.txt"); return 255; }
+	save_out = dup(fileno(stdout));
+    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
+    
 	printAssemblyCode();
+
+	fflush(stdout); close(out);
+    dup2(save_out, fileno(stdout));
+    close(save_out);
 
 	return 0;
 }

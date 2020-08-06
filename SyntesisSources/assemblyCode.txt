@@ -1,0 +1,422 @@
+PUSH &a 
+@
+PUSH &$t1 
+!
+PUSH &low 
+@
+PUSH &$t2 
+!
+PUSH &high 
+@
+PUSH &$t3 
+!
+PUSH &k 
+@
+PUSH &$t4 
+!
+PUSH &low 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &k 
+!
+PUSH &x 
+@
+PUSH &$t6 
+!
+PUSH &low 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &x 
+!
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &low 
+@
+PUSH &$t10 
+!
+INPUT READ
+INPUT LOAD
+PUSH &$t12 
+!
+PUSH &$t13 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t14 
+!
+PUSH &high 
+@
+PUSH &$t15 
+!
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t2 
+!
+PUSH &x 
+@
+PUSH &$t3 
+!
+PUSH &x 
+@
+PUSH &$t5 
+!
+PUSH &i 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &x 
+!
+PUSH &k 
+@
+PUSH &$t8 
+!
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH &k 
+!
+PUSH &i 
+@
+PUSH &$t10 
+!
+PUSH &i 
+@
+PUSH &$t11 
+!
+PUSH &$t12 
+@
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH &i 
+!
+PUSH &k 
+@
+PUSH &$t13 
+!
+PUSH &a 
+@
+PUSH &$t14 
+!
+PUSH &low 
+@
+PUSH &$t15 
+!
+PUSH &high 
+@
+PUSH &$t0 
+!
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &low 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH &high 
+@
+PUSH &$t4 
+!
+PUSH &k 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t8 
+!
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &high 
+@
+PUSH &$t10 
+!
+CALL minloc 
+PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH &$t0 
+!
+PUSH &$t0 
+@
+PUSH &high 
+!
+PUSH &t 
+@
+PUSH &$t12 
+!
+PUSH &k 
+@
+PUSH &$t13 
+!
+PUSH &$t13 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &t 
+!
+PUSH &k 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t0 
+!
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &$t0 
+!
+PUSH &$t0 
+@
+PUSH &a 
+!
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &a 
+ADD
+@
+PUSH &$t4 
+!
+PUSH &t 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &a 
+!
+PUSH &i 
+@
+PUSH &$t6 
+!
+PUSH &i 
+@
+PUSH &$t7 
+!
+PUSH &$t8 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &0 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t10 
+!
+PUSH &i 
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &vet 
+ADD
+@
+PUSH &$t13 
+!
+PUSH &0 
+@
+PUSH &$t13 
+!
+PUSH &$t13 
+@
+PUSH &vet 
+!
+PUSH &i 
+@
+PUSH &$t14 
+!
+PUSH &i 
+@
+PUSH &$t15 
+!
+PUSH &$t0 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &vet 
+ADD
+@
+PUSH &$t2 
+!
+CALL sort 
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+PUSH &low 
+!
+PUSH &i 
+@
+PUSH &$t4 
+!
+PUSH &0 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t5 
+!
+PUSH &i 
+@
+PUSH &$t7 
+!
+OUTPUT SEND
+OUTPUT PRINT
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &i 
+@
+PUSH &$t10 
+!
+PUSH &$t11 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &i 
+!
