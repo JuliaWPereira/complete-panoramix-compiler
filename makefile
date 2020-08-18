@@ -1,4 +1,4 @@
-INPUT_NAME = InterCodeTest
+INPUT_NAME = sort
 
 all:
 	(cd Sources;make all)

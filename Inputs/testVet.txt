@@ -3,5 +3,6 @@ void main(void)
 	int i;
 	int vet[10];
 	i = input();
-	vet[i] = 1;
+	vet[i] = 4;
+	vet[i] = vet[i] - 1;
 }

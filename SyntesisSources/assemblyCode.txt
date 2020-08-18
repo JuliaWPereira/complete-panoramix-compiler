@@ -37,7 +37,7 @@ PUSH &$t7
 PUSH &$t7 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t8 
 !
@@ -57,9 +57,22 @@ PUSH &low
 @
 PUSH &$t10 
 !
+PUSH &$t10 
+@
+PUSH 1 
++
+PUSH &$t11 
+!
 INPUT READ
 INPUT LOAD
 PUSH &$t12 
+!
+PUSH &$t11 
+@
+PUSH &$t12 
+@
++
+PUSH &$t13 
 !
 PUSH &$t13 
 @
@@ -84,7 +97,7 @@ PUSH &$t1
 PUSH &$t1 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t2 
 !
@@ -103,7 +116,7 @@ PUSH &$t6
 PUSH &$t6 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t7 
 !
@@ -138,6 +151,12 @@ PUSH &$t10
 PUSH &i 
 @
 PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH 1 
++
+PUSH &$t12 
 !
 PUSH &$t12 
 @
@@ -187,6 +206,12 @@ PUSH &high
 @
 PUSH &$t4 
 !
+PUSH &$t4 
+@
+PUSH 1 
+-
+PUSH &$t5 
+!
 PUSH &k 
 @
 PUSH &$t7 
@@ -194,7 +219,7 @@ PUSH &$t7
 PUSH &$t7 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t8 
 !
@@ -228,7 +253,7 @@ PUSH &$t13
 PUSH &$t13 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t14 
 !
@@ -247,7 +272,7 @@ PUSH &$t15
 PUSH &$t15 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t0 
 !
@@ -258,7 +283,7 @@ PUSH &$t1
 PUSH &$t1 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t2 
 !
@@ -277,7 +302,7 @@ PUSH &$t3
 PUSH &$t3 
 @
 PUSH &a 
-ADD
++
 @
 PUSH &$t4 
 !
@@ -300,6 +325,12 @@ PUSH &$t6
 PUSH &i 
 @
 PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH 1 
++
+PUSH &$t8 
 !
 PUSH &$t8 
 @
@@ -332,7 +363,7 @@ PUSH &$t12
 PUSH &$t12 
 @
 PUSH &vet 
-ADD
++
 @
 PUSH &$t13 
 !
@@ -352,6 +383,12 @@ PUSH &i
 @
 PUSH &$t15 
 !
+PUSH &$t15 
+@
+PUSH 1 
++
+PUSH &$t0 
+!
 PUSH &$t0 
 @
 PUSH &$t14 
@@ -367,7 +404,7 @@ PUSH &$t1
 PUSH &$t1 
 @
 PUSH &vet 
-ADD
++
 @
 PUSH &$t2 
 !
@@ -411,6 +448,12 @@ PUSH &$t9
 PUSH &i 
 @
 PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH 1 
++
+PUSH &$t11 
 !
 PUSH &$t11 
 @

@@ -15,6 +15,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <ctype.h>
 #include "assembler.h" /* header of this file */
 
 struct memoryList* create_mem_list(char *label, int type, int scope, int first_pos, int memory_size)
@@ -160,7 +161,7 @@ void assembly_LOAD(char* arg_1, char* arg_2, char* arg_3)
 		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 
-		assembly = create_assembly_code("ADD", NULL, 0, assembly_code_line++, 1);
+		assembly = create_assembly_code("+", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 
 		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
@@ -250,7 +251,7 @@ void assembly_CALL(char *arg_1, char* arg_2)
 	struct memoryList *new_mem;
 	struct assembly_code *assembly;
 	char *s, *t;
-	printf(">>%s\n", arg_2);
+	//printf(">>%s\n", arg_2);
 
 	if(!strcmp(arg_2,"input")){
 		assembly = create_assembly_code("INPUT READ", NULL, 0, assembly_code_line++, 1);
@@ -288,6 +289,174 @@ void assembly_CALL(char *arg_1, char* arg_2)
 	}
 }
 
+void assembly_ADD(char *arg_1, char* arg_2, char* arg_3)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	assembly = create_assembly_code("+", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);	
+	
+}
+
+void assembly_SUB(char *arg_1, char* arg_2, char* arg_3)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);	
+	
+}
+
+void assembly_MULT(char *arg_1, char* arg_2, char* arg_3)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	assembly = create_assembly_code("*", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);	
+	
+}
+
+
+void assembly_DIV(char *arg_1, char* arg_2, char* arg_3)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	assembly = create_assembly_code("/", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);	
+	
+}
 void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
 {
 	if(!(strcmp(operator,"FUN"))){
@@ -313,6 +482,22 @@ void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
 	else if(!(strcmp(operator,"CALL"))){
 		printf("CALL\n");
 		assembly_CALL(arg_1,arg_2);
+	}
+	else if(!(strcmp(operator,"ADD"))){
+		printf("ADD\n");
+		assembly_ADD(arg_1,arg_2,arg_3);
+	}
+	else if(!(strcmp(operator,"SUB"))){
+		printf("SUB\n");
+		assembly_SUB(arg_1,arg_2,arg_3);
+	}
+	else if(!(strcmp(operator,"MULT"))){
+		printf("MULT\n");
+		assembly_MULT(arg_1,arg_2,arg_3);
+	}
+	else if(!(strcmp(operator,"DIV"))){
+		printf("DIV\n");
+		assembly_DIV(arg_1,arg_2,arg_3);
 	}
 }
 
