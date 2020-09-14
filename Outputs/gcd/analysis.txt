@@ -1,0 +1,8 @@
+1: error: lexical error:  
+2: error: lexical error:  
+3: error: lexical error:  
+4: error: lexical error:  
+5: error: lexical error:  
+6: error: lexical error:  
+7: error: lexical error:  
+8: error: lexical error:  

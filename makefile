@@ -1,4 +1,4 @@
-INPUT_NAME = sort
+INPUT_NAME = sort_old
 
 all:
 	(cd Sources;make all)

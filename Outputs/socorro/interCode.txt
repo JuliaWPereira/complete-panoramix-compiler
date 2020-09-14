@@ -1,0 +1,7 @@
+(FUN,VOID,main,-)
+(ALLOC,x,main,-)
+(LOAD,$t1,x,-)
+(ASSIGN,$t1,1,-)
+(STORE,$t1,x,-)
+(END,main,-,-)
+(HALT,-,-,-)

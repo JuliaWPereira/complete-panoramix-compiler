@@ -1551,7 +1551,9 @@ struct quadrupleList* newQuadruple(struct ast *a)
 void addQuadruple(struct ast *a)
 {
 	struct quadrupleList *newQuad,*aux;
-	if(a->nodetype == 'L' || a->nodetype == 260 || a->nodetype == 259) return; /* nodes that should be ignored*/
+	if(a->nodetype == 'L' || a->nodetype == 260 ||
+	 a->nodetype == 259) return; 
+	 /* nodes that should be ignored*/
 	newQuad = newQuadruple(a);
 	newQuad->quad.op = a->nodetype;
 	aux = quadList;
