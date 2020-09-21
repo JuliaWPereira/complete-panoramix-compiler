@@ -19,6 +19,7 @@ struct memoryField
 	int scope; /* 0 - local; 1 - global; 2 - function */
 	int first_pos; /* first position allocated at the memory */
 	int memory_size; /* size occupied in bytes (int = 2 bytes (at AsterixForth)) */
+	int instruction_line; /* it is necessary to label fields (labels and functions) */
 };
 
 struct memoryList
@@ -52,7 +53,7 @@ struct assembly_code *end_assembly = NULL;
 
 
 FILE* assembler(char* intermediate_code_file_name);
-struct memoryList* create_mem_list(char *label, int type, int scope, int first_pos, int memory_size);
+struct memoryList* create_mem_list(char *label, int type, int scope, int first_pos, int memory_size, int instruction_line);
 void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3);
 void assembly_FUN(char* arg_1, char* arg_2);
 

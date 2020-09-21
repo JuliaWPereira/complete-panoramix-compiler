@@ -1,33 +1,48 @@
-|-------------------------------------------------------|
-|                      Memory Table                     |
-|-------------------------------------------------------|
-|    label    |  type  |  scope   | first_pos  |  size  |
-|-------------------------------------------------------|
-|         $t0 |  INT   | GLOBAL   |          0 |      2 |
-|         $t1 |  INT   | GLOBAL   |          2 |      2 |
-|         $t2 |  INT   | GLOBAL   |          4 |      2 |
-|         $t3 |  INT   | GLOBAL   |          6 |      2 |
-|         $t4 |  INT   | GLOBAL   |          8 |      2 |
-|         $t5 |  INT   | GLOBAL   |         10 |      2 |
-|         $t6 |  INT   | GLOBAL   |         12 |      2 |
-|         $t7 |  INT   | GLOBAL   |         14 |      2 |
-|         $t8 |  INT   | GLOBAL   |         16 |      2 |
-|         $t9 |  INT   | GLOBAL   |         18 |      2 |
-|        $t10 |  INT   | GLOBAL   |         20 |      2 |
-|        $t11 |  INT   | GLOBAL   |         22 |      2 |
-|        $t12 |  INT   | GLOBAL   |         24 |      2 |
-|        $t13 |  INT   | GLOBAL   |         26 |      2 |
-|        $t14 |  INT   | GLOBAL   |         28 |      2 |
-|        $t15 |  INT   | GLOBAL   |         30 |      2 |
-|         vet |  INT[] | GLOBAL   |         32 |     20 |
-|      minloc |  INT   | FUNCTION |         52 |      2 |
-|           i |  INT   | LOCAL    |         54 |      2 |
-|           x |  INT   | LOCAL    |         56 |      2 |
-|           k |  INT   | LOCAL    |         58 |      2 |
-|        sort |  INT   | FUNCTION |         60 |      2 |
-|           i |  INT   | LOCAL    |         62 |      2 |
-|           k |  INT   | LOCAL    |         64 |      2 |
-|           t |  INT   | LOCAL    |         66 |      2 |
-|        main |  VOID  | FUNCTION |         68 |      2 |
-|           i |  INT   | LOCAL    |         70 |      2 |
-|-------------------------------------------------------|
+|-------------------------------------------------------------------|
+|                            Memory Table                           |
+|-------------------------------------------------------------------|
+|    label    |  type  |  scope   | first_pos  |  size  | inst_line |
+|-------------------------------------------------------------------|
+|         $t0 |  INT   | GLOBAL   |          0 |      2 |         - |
+|         $t1 |  INT   | GLOBAL   |          2 |      2 |         - |
+|         $t2 |  INT   | GLOBAL   |          4 |      2 |         - |
+|         $t3 |  INT   | GLOBAL   |          6 |      2 |         - |
+|         $t4 |  INT   | GLOBAL   |          8 |      2 |         - |
+|         $t5 |  INT   | GLOBAL   |         10 |      2 |         - |
+|         $t6 |  INT   | GLOBAL   |         12 |      2 |         - |
+|         $t7 |  INT   | GLOBAL   |         14 |      2 |         - |
+|         $t8 |  INT   | GLOBAL   |         16 |      2 |         - |
+|         $t9 |  INT   | GLOBAL   |         18 |      2 |         - |
+|        $t10 |  INT   | GLOBAL   |         20 |      2 |         - |
+|        $t11 |  INT   | GLOBAL   |         22 |      2 |         - |
+|        $t12 |  INT   | GLOBAL   |         24 |      2 |         - |
+|        $t13 |  INT   | GLOBAL   |         26 |      2 |         - |
+|        $t14 |  INT   | GLOBAL   |         28 |      2 |         - |
+|        $t15 |  INT   | GLOBAL   |         30 |      2 |         - |
+|         vet |  INT[] | GLOBAL   |         32 |     20 |         - |
+|-------------------------------------------------------------------|
+|      minloc |  INT   | FUNCTION |         72 |      - |         0 |
+|           i |  INT   | LOCAL    |         72 |      1 |         - |
+|           x |  INT   | LOCAL    |         74 |      1 |         - |
+|           k |  INT   | LOCAL    |         76 |      1 |         - |
+|          L1 |   -    | LOCAL    |          - |      - |        74 |
+|          L3 |   -    | LOCAL    |          - |      - |       156 |
+|          L2 |   -    | LOCAL    |          - |      - |       179 |
+|-------------------------------------------------------------------|
+|        sort |  VOID  | FUNCTION |         78 |      - |       186 |
+|           a |  INT[] | LOCAL    |         78 |     -1 |         - |
+|         low |  INT   | LOCAL    |         76 |      1 |         - |
+|        high |  INT   | LOCAL    |         78 |      1 |         - |
+|           i |  INT   | LOCAL    |         80 |      1 |         - |
+|           k |  INT   | LOCAL    |         82 |      1 |         - |
+|          L4 |   -    | LOCAL    |          - |      - |       203 |
+|           t |  INT   | LOCAL    |         84 |      1 |         - |
+|          L5 |   -    | LOCAL    |          - |      - |       362 |
+|-------------------------------------------------------------------|
+|        main |  VOID  | FUNCTION |         86 |      - |       363 |
+|           i |  INT   | LOCAL    |         86 |      1 |         - |
+|          L6 |   -    | LOCAL    |          - |      - |       376 |
+|          L7 |   -    | LOCAL    |          - |      - |       435 |
+|          L8 |   -    | LOCAL    |          - |      - |       459 |
+|          L9 |   -    | LOCAL    |          - |      - |       510 |
+|-------------------------------------------------------------------|

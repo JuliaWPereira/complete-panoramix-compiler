@@ -1355,7 +1355,13 @@ struct quadrupleList* newQuadruple(struct ast *a)
 					else new->quad.sym2 = createsymbol("GLOBAL");
 					if(new->quad.sym1->length != 0)
 					{
-						new->quad.sym3 = createsymbol(itoa(new->quad.sym1->length,10));
+						if(new->quad.sym1->length == -1)
+						{
+							new->quad.sym3 = createsymbol(itoa(0,10));	
+						}
+						else{
+							new->quad.sym3 = createsymbol(itoa(new->quad.sym1->length,10));
+						}
 					}
 				}					
 				else /* variable use */
@@ -1590,6 +1596,7 @@ void insertArgList()
 
 			new->quad.sym1 = temp_sym;
 			new->quad.sym2 = found_sym;
+			new->quad.sym3 = createsymbol(itoa(found_sym->isArray,10));
 			push_symStack(temp_sym);
 
 			auxQuad->next = new;
@@ -1619,7 +1626,7 @@ int isSymmetric(int type)
 		case '=': case '+': case '-' :case '*':
 		case '/': case '1': case '2': case '3':
 		case '4': case '5': case '6': case 'C':
-		case 'N': return 1;
+		case 'N': case 'R': return 1;
 		default: return 0; 
 	}
 }
@@ -1644,10 +1651,12 @@ void generateInterCodeDef(struct ast *a)
 {
 	if(a->left != NULL)
 	{
+		if(a->right != NULL){
+			a->right->nodetype = 'D';
+			addQuadruple(a->right);
+		}
 		generateInterCodeDef(a->left);
 	}
-	a->right->nodetype = 'D';
-	addQuadruple(a->right);
 }
 
 
@@ -1787,6 +1796,7 @@ void printQuadruple(struct quadruple quad)
 				{
 					printf("(ALLOC,%s,%s,",quad.sym1->name,quad.sym2->name);
 					if(quad.sym3 == NULL) printf("-)\n");
+					else if(!strcmp(quad.sym3->name,"0")) printf("vet_pointer)\n");
 					else printf("%s)\n",quad.sym3->name);
 				}
 			/* it is a variable use */
