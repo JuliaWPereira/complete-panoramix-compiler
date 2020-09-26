@@ -518,6 +518,77 @@ void assembly_EQ(char *arg_1, char* arg_2, char* arg_3)
 	add_assembly(assembly);		
 }
 
+void assembly_NEQ(char *arg_1, char* arg_2, char* arg_3)
+{
+	struct memoryList *new_mem;
+	struct assembly_code *assembly;
+	char *s, *t;
+	
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("DUP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("0"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("0"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("XOR", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("1"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	t = strdup("&");
+	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);		
+}
+
 void assembly_LT(char *arg_1, char* arg_2, char* arg_3)
 {
 	struct memoryList *new_mem;
@@ -548,7 +619,37 @@ void assembly_LT(char *arg_1, char* arg_2, char* arg_3)
 		add_assembly(assembly);
 	}
 
-	assembly = create_assembly_code("/", NULL, 0, assembly_code_line++, 1);
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("DUP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("0"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("0"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("--", NULL, 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("PUSH", strdup("1"), 0, assembly_code_line++, 1);
+	add_assembly(assembly);
+
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 
 	t = strdup("&");
@@ -556,8 +657,7 @@ void assembly_LT(char *arg_1, char* arg_2, char* arg_3)
 	add_assembly(assembly);
 
 	assembly = create_assembly_code("!", NULL, 0, assembly_code_line++, 1);
-	add_assembly(assembly);	
-	
+	add_assembly(assembly);		
 }
 
 void assembly_GEQ(char *arg_1, char* arg_2, char* arg_3)
@@ -593,13 +693,13 @@ void assembly_GEQ(char *arg_1, char* arg_2, char* arg_3)
 	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 
-	assembly = create_assembly_code("/", NULL, 0, assembly_code_line++, 1);
+	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
-	
+
 	assembly = create_assembly_code("PUSH", itoa(1,10), 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 
-	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
+	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 	
 	t = strdup("&");
@@ -696,11 +796,11 @@ void assembly_GT(char *arg_1, char* arg_2, char* arg_3)
 	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 
-	assembly = create_assembly_code("PUSH", itoa(1,10), 0, assembly_code_line++, 1);
-	add_assembly(assembly);
+//	assembly = create_assembly_code("PUSH", itoa(1,10), 0, assembly_code_line++, 1);
+//	add_assembly(assembly);
 
-	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
-	add_assembly(assembly);
+//	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
+//	add_assembly(assembly);
 	
 	t = strdup("&");
 	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
@@ -863,6 +963,10 @@ void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
 	else if(!(strcmp(operator,"EQ"))){
 		printf("EQ\n");
 		assembly_EQ(arg_1,arg_2,arg_3);
+	}
+	else if(!(strcmp(operator,"NEQ"))){
+		printf("NEQ\n");
+		assembly_NEQ(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"LT"))){
 		printf("LT\n");

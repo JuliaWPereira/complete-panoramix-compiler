@@ -60,7 +60,10 @@ PUSH &$t9
 PUSH &$t9 
 @
 PUSH 1 
-+
+SWAP
+LEQ
+PUSH 1 
+-
 PUSH &$t10 
 !
 PUSH &$t10 
@@ -83,7 +86,17 @@ PUSH &$t11
 @
 PUSH &$t12 
 @
-/
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
 PUSH &$t13 
 !
 PUSH &$t13 
@@ -108,7 +121,17 @@ PUSH &$t15
 @
 PUSH &$t0 
 @
-/
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
 PUSH &$t1 
 !
 PUSH &$t1 
@@ -217,7 +240,17 @@ PUSH &$t13
 @
 PUSH &$t15 
 @
-/
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
 PUSH &$t0 
 !
 PUSH &$t0 
@@ -378,7 +411,17 @@ PUSH &$t4
 PUSH &$t4 
 @
 PUSH 10 
-/
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
 PUSH &$t5 
 !
 PUSH &$t5 
@@ -461,7 +504,17 @@ PUSH &$t15
 PUSH &$t15 
 @
 PUSH 10 
-/
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
 PUSH &$t0 
 !
 PUSH &$t0 
