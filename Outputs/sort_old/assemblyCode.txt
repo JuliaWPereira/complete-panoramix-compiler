@@ -60,10 +60,7 @@ PUSH &$t9
 PUSH &$t9 
 @
 PUSH 1 
-SWAP
-LEQ
-PUSH 1 
--
++
 PUSH &$t10 
 !
 PUSH &$t10 

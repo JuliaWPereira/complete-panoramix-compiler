@@ -921,99 +921,99 @@ void assembly_HALT()
 void generate_assembly(char* operator, char* arg_1, char* arg_2, char* arg_3)
 {
 	if(!(strcmp(operator,"FUN"))){
-		printf("FUN\n");
+//		printf("FUN\n");
 		assembly_FUN(arg_1,arg_2);
 	}
 	else if(!(strcmp(operator,"ALLOC"))){
-		printf("ALLOC\n");
+//		printf("ALLOC\n");
 		assembly_ALLOC(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"LOAD"))){
-		printf("LOAD\n");
+//		printf("LOAD\n");
 		assembly_LOAD(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"STORE"))){
-		printf("STORE\n");
+//		printf("STORE\n");
 		assembly_STORE(arg_1,arg_2);
 	}
 	else if(!(strcmp(operator,"ASSIGN"))){
-		printf("ASSIGN\n");
+//		printf("ASSIGN\n");
 		assembly_ASSIGN(arg_1,arg_2);
 	}
 	else if(!(strcmp(operator,"CALL"))){
-		printf("CALL\n");
+//		printf("CALL\n");
 		assembly_CALL(arg_1,arg_2);
 	}
 	else if(!(strcmp(operator,"ADD"))){
-		printf("ADD\n");
+//		printf("ADD\n");
 		assembly_ADD(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"SUB"))){
-		printf("SUB\n");
+//		printf("SUB\n");
 		assembly_SUB(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"MULT"))){
-		printf("MULT\n");
+//		printf("MULT\n");
 		assembly_MULT(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"DIV"))){
-		printf("DIV\n");
+//		printf("DIV\n");
 		assembly_DIV(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"EQ"))){
-		printf("EQ\n");
+//		printf("EQ\n");
 		assembly_EQ(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"NEQ"))){
-		printf("NEQ\n");
+//		printf("NEQ\n");
 		assembly_NEQ(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"LT"))){
-		printf("LT\n");
+//		printf("LT\n");
 		assembly_LT(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"GEQ"))){
-		printf("GEQ\n");
+//		printf("GEQ\n");
 		assembly_GEQ(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"LEQ"))){
-		printf("LEQ\n");
+//		printf("LEQ\n");
 		assembly_LEQ(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"GT"))){
-		printf("GT\n");
+//		printf("GT\n");
 		assembly_GT(arg_1,arg_2,arg_3);
 	}
 	else if(!(strcmp(operator,"LABEL"))){
-		printf("LABEL\n");
+//		printf("LABEL\n");
 		assembly_LABEL(arg_1);
 	}
 	else if(!(strcmp(operator,"GOTO"))){
-		printf("GOTO\n");
+//		printf("GOTO\n");
 		assembly_GOTO(arg_1);
 	}
 	else if(!(strcmp(operator,"IFF"))){
-		printf("IFF\n");
+//		printf("IFF\n");
 		assembly_IFF(arg_1,arg_2);
 	}
 	else if(!(strcmp(operator,"PARAM"))){
-		printf("PARAM\n");
+//		printf("PARAM\n");
 		assembly_PARAM(arg_1);
 	}
 	else if(!(strcmp(operator,"ARG"))){
-		printf("ARG\n");
+//		printf("ARG\n");
 		assembly_ARG(arg_2);
 	}
 	else if(!(strcmp(operator,"RET"))){
-		printf("RET\n");
+//		printf("RET\n");
 		assembly_RET(arg_1);
 	}
 	else if(!(strcmp(operator,"END"))){
-		printf("END\n");
+//		printf("END\n");
 		assembly_END(arg_1);
 	}
 	else if(!(strcmp(operator,"HALT"))){
-		printf("HALT\n");
+//		printf("HALT\n");
 		assembly_HALT();
 	}
 }
@@ -1152,9 +1152,15 @@ void printAssemblyCode()
 	}
 }
 
+
 int main(int argc, char **argv)
 {
-	assembler("../Outputs/sort_old/interCode.txt");	
+	//FILE *input_file;
+
+	printf("%d\n",argc );
+	printf("Running assembler for %s\n", argv[1]);
+	
+	assembler(argv[1]);	
 
 	int out = open("memorytab.txt", O_WRONLY | O_TRUNC | O_CREAT,0600);
     if (-1 == out) { perror("opening memorytab.txt"); return 255; }
