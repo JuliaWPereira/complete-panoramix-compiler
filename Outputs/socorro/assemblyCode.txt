@@ -1,0 +1,59 @@
+PUSH &x 
+@
+PUSH &$t1 
+!
+PUSH &1 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &x 
+!
+PUSH &x 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH 10 
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+IF L2 
+PUSH &x 
+@
+PUSH &$t4 
+!
+PUSH &x 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH 1 
++
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &x 
+!
+CALL L1 
+HALT

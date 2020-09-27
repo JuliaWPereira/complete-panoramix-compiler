@@ -1,0 +1,51 @@
+PUSH &v 
+!
+PUSH &v 
+@
+PUSH &$t1 
+!
+EXIT
+PUSH &x 
+@
+PUSH &$t2 
+!
+PUSH &30 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &x 
+!
+PUSH &y 
+@
+PUSH &$t3 
+!
+PUSH &20 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &y 
+!
+PUSH &x 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &y 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+CALL gcd 
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+OUTPUT SEND
+OUTPUT PRINT
+HALT

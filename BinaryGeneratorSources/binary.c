@@ -1,10 +1,10 @@
 /**********************************************
  *
  *   Panoramix Compiler 
- *   - Assembler Functions
+ *   - Binary Functions
  *    
- *   @version 2.0.1
- *   @edited May 09, 2020
+ *   @version 1.0.0
+ *   @edited September 20, 2020
  *   @author Júlia Wotzasek Pereira
  *
 **********************************************/
@@ -89,7 +89,7 @@ void assembly_FUN(char* arg_1, char* arg_2)
 	
 	add_mem(new_mem);
 	
-	assembly = create_assembly_code("FUN", strdup(arg_2)	, 0, assembly_code_line++, 0);
+	assembly = create_assembly_code("FUN", NULL, 0, assembly_code_line++, 0);
 	
 	add_assembly(assembly);
 }
@@ -130,7 +130,7 @@ void assembly_ALLOC(char* arg_1, char* arg_2, char* arg_3)
 	int scope;
 	type = (!strcmp(arg_3, "-") | !strcmp(arg_3, "--"))? 1:2;
 	size = (!strcmp(arg_3, "-") | !strcmp(arg_3, "--"))? 1:string_to_int(arg_3) * 2;
-	size = (!strcmp(arg_3, "vet_pointer"))? 0:size;
+	size = (!strcmp(arg_3, "vet_pointer"))? -1:size;
 	scope = (!strcmp(arg_2, "GLOBAL"))? 1:0;
 	//printf("%d - %s\n", size, arg_3);
 	new_mem = create_mem_list(arg_1, type, scope, next_free_memory_pos, size, -1);
@@ -1151,316 +1151,7 @@ void printAssemblyCode()
 		assembly = assembly->next;
 	}
 }
-/*************************************************************************************/
-/*
- * Binary Code Generator
- *
- */
 
-char *scope_bin = "GLOBAL";
-
-int search_address(char *label)
-{
-	struct memoryList *memlist;
-	memlist = begin_memList;
-	
-	while(memlist != NULL)
-	{
-		if(!strcmp(memlist->mem.label,label) && memlist->mem.scope == 1){
-			return memlist->mem.first_pos;
-		}
-		memlist = memlist->next;
-		if(memlist->mem.scope != 1){
-			break;
-		}
-	}
-		
-	while(memlist != NULL)
-	{
-		if(!strcmp(memlist->mem.label,scope_bin)){
-		
-			memlist = memlist->next;
-			while(memlist != NULL)
-			{
-				if(!strcmp(memlist->mem.label,label)){
-					return memlist->mem.first_pos;
-				}
-				memlist = memlist->next;
-			}
-		}
-		else{
-			memlist = memlist->next;
-		}
-	}
-	
-	
-
-	return -1;
-}
-
-int search_label(char *label)
-{
-	struct memoryList *memlist;
-	memlist = begin_memList;
-	
-	while(memlist != NULL)
-	{
-		if(!strcmp(memlist->mem.label,label)){
-			return memlist->mem.instruction_line;
-		}
-		memlist = memlist->next;
-	}
-	return -1;
-}
-
-void binary_PUSH(struct assembly_instruction assembly)
-{
-	if(isdigit(assembly.parameter[0])){
-		int value = string_to_int(assembly.parameter);			
-		char *bin_value = itoa(value,2);
-		printf("1");
-		for(int i = 0; i < 15 - strlen(bin_value);i++) printf("0");
-		printf("%s", bin_value);
-	}else{
-		char *label;
-		label = strdup(assembly.parameter);
-	    memmove(label, label+1, strlen(label));
-		int add = search_address(label);
-		printf("1");
-		char *bin_value = itoa(add,2);
-		for(int i = 0; i < 15 - strlen(bin_value);i++) printf("0");
-		printf("%s", bin_value);
-	}
-}
-
-char* string_repeat( int n, const char * s ) {
-  size_t slen = strlen(s);
-  char * dest = malloc(n*slen+1);
- 
-  int i; char * p;
-  for ( i=0, p = dest; i < n; ++i, p += slen ) {
-    memcpy(p, s, slen);
-  }
-  *p = '\0';
-  return dest;
-}
-
-char* complement_2(char* bin)
-{
-	int n = strlen(bin);
-	int carry = 1;
-	char *res;
-	char digit;
-	res = (char*)malloc(n * sizeof(char));
-	for(int i = n - 1; i >= 0; i--){
-		digit = (bin[i] == '0')? 1:0;
-		res[i] = digit^carry + 48;
-		carry = digit*carry;
-	}
-	//printf("res:%s\n",res );
-	return res;
-}
-
-void binary_IF(struct assembly_instruction assembly)
-{
-	char *label;
-	label = strdup(assembly.parameter);
-    int inst = search_label(label);
-    int diff = inst - assembly.line;
-	int comp_2 = (diff < 0)? 1:0;
-	
-	printf("10011");
-	char *bin_value = itoa(abs(diff),2);
-
-	if(comp_2 == 1){
-		char *str_zeros;
-		str_zeros = string_repeat(11-strlen(bin_value),"0");
-		strcat(str_zeros,bin_value);
-		
-		bin_value = complement_2(str_zeros);
-	}
-
-	for(int i = 0; i < 11 - strlen(bin_value);i++) printf("0");
-	printf("%s", bin_value);
-}
-
-void binary_CALL(struct assembly_instruction assembly)
-{
-	char *label;
-	label = strdup(assembly.parameter);
-    int inst = search_label(label);
-    int diff = inst - assembly.line;
-	int comp_2 = (diff < 0)? 1:0;
-	
-	printf("10100");
-	char *bin_value = itoa(abs(diff),2);
-
-	if(comp_2 == 1){
-		char *str_zeros;
-		str_zeros = string_repeat(11-strlen(bin_value),"0");
-		strcat(str_zeros,bin_value);
-		
-		bin_value = complement_2(str_zeros);
-	}
-
-	for(int i = 0; i < 11 - strlen(bin_value);i++) printf("0");
-	printf("%s", bin_value);
-}
-
-void binary_WRITE(struct assembly_instruction assembly)
-{
-	
-	char *label;
-	label = strdup(assembly.parameter);
-    memmove(label, label+1, strlen(label));
-	int add = search_address(label);
-	printf("1");
-	char *bin_value = itoa(add,2);
-	for(int i = 0; i < 15 - strlen(bin_value);i++) printf("0");
-	printf("%s", bin_value);
-}
-
-
-void generate_binary()
-{
-	struct assembly_code *assembly;
-	assembly = begin_assembly;
-	while(assembly != NULL)
-	{
-		if(!strcmp(assembly->inst.operation,"FUN")){
-			//printf("-------- FUN %s --------\n",assembly->inst.parameter);
-			scope_bin = strdup(assembly->inst.parameter);
-		}
-		if(!strcmp(assembly->inst.operation,"PUSH")){
-			//printf("PUSH:\n\t");
-			binary_PUSH(assembly->inst);
-			printf("\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"AND"))){
-			//printf("AND:\n\t");
-			printf("1000001000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"OR"))){
-			//printf("OR:\n\t");
-			printf("1000011000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"XOR"))){
-			//printf("XOR:\n\t");
-			printf("1000101000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"+"))){
-			//printf("+:\n\t");
-			printf("1000100000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"-"))){
-			//printf("-:\n\t");
-			printf("1000010000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"--"))){
-			//printf("--:\n\t");
-			printf("1000110000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"LR"))){
-			//printf("LR:\n\t");
-			printf("1000000000000001\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"AL"))){
-			//printf("AL:\n\t");
-			printf("1000000000000010\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"AR"))){
-			//printf("AR:\n\t");
-			printf("1000000000000011\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"/"))){
-			//printf("/:\n\t");
-			printf("1000000100000100\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"*"))){
-			//printf("*:\n\t");
-			printf("1000000100000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"LEQ"))){
-			//printf("LEQ:\n\t");
-			printf("1000000110000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"DUP"))){
-			//printf("DUP:\n\t");
-			printf("1000000001000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"OVER"))){
-			//printf("OVER:\n\t");
-			printf("1000111000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"EXIT"))){
-			//printf("EXIT:\n\t");
-			printf("1000000000100000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"R>"))){
-			//printf("R>:\n\t");
-			printf("1000000001000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,">R"))){
-			//printf(">R:\n\t");
-			printf("1000000001010000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"DROP"))){
-			//printf("DROP:\n\t");
-			printf("1110111000000001\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"SWAP"))){
-			//printf("SWAP:\n\t");
-			printf("1000111001000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"NOP"))){
-			//printf("NOP:\n\t");
-			printf("1000000000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"HALT"))){
-			//printf("HALT:\n\t");
-			printf("1110000000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"INPUT READ"))){
-			//printf("INPUT READ:\n\t");
-			printf("1100000000000001\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"INPUT LOAD"))){
-			//printf("INPUT LOAD:\n\t");
-			printf("1100000000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"OUTPUT SEND"))){
-			//printf("OUTPUT SEND:\n\t");
-			printf("0000000000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"OUTPUT PRINT"))){
-			//printf("OUTPUT PRINT:\n\t");
-			printf("1101000000000000\n");
-		}
-
-		/* Branch and memory instructions  */
-		if(!(strcmp(assembly->inst.operation,"IF"))){
-			//printf("IF:\n\t");
-			binary_IF(assembly->inst);			
-			printf("\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"CALL"))){
-			//printf("CALL:\n\t");
-			binary_CALL(assembly->inst);			
-			printf("\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"!"))){
-			//printf("!:\n\t");
-			printf("1111000000000000\n");
-		}
-		if(!(strcmp(assembly->inst.operation,"@"))){
-			//printf("@:\n\t");
-			printf("1110100000000000\n");
-		}
-
-		assembly = assembly->next;
-	}
-
-}
 
 int main(int argc, char **argv)
 {
@@ -1488,17 +1179,6 @@ int main(int argc, char **argv)
     if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
     
 	printAssemblyCode();
-
-	fflush(stdout); close(out);
-    dup2(save_out, fileno(stdout));
-    close(save_out);
-
-    out = open("binaryCode.txt", O_WRONLY | O_TRUNC | O_CREAT,0600);
-    if (-1 == out) { perror("opening binaryCode.txt"); return 255; }
-	save_out = dup(fileno(stdout));
-    if (-1 == dup2(out, fileno(stdout))) { perror("cannot redirect stdout"); return 255; }
-
-    generate_binary("assemblyCode.txt");
 
 	fflush(stdout); close(out);
     dup2(save_out, fileno(stdout));

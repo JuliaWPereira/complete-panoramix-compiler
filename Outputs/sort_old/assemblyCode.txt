@@ -118,17 +118,7 @@ PUSH &$t15
 @
 PUSH &$t0 
 @
--
-DUP
-PUSH 0 
-LEQ
-SWAP
-PUSH 0 
-SWAP
-LEQ
---
-PUSH 1 
--
+XOR
 PUSH &$t1 
 !
 PUSH &$t1 

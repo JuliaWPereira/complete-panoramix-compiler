@@ -9,7 +9,7 @@ int minloc ( int a[], int low, int high )
 	x = a[low];
 	i = low + 1;
 	while (i < high){
-		if (a[i] < x){
+		if (a[i] == x){
 			x = a[i];
 			k = i;
 		}

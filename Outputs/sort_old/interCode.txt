@@ -29,7 +29,7 @@
 (LOAD,$t14,i,-)
 (LOAD,$t15,a,$t14)
 (LOAD,$t0,x,-)
-(LT,$t1,$t15,$t0)
+(EQ,$t1,$t15,$t0)
 (IFF,$t1,L3,-)
 (LOAD,$t2,x,-)
 (LOAD,$t3,i,-)

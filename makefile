@@ -13,4 +13,4 @@ all:
 	./assembler Outputs/$(INPUT_NAME)/interCode.txt
 	mv assemblyCode.txt ./Outputs/$(INPUT_NAME)/assemblyCode.txt
 	mv memorytab.txt ./Outputs/$(INPUT_NAME)/memorytab.txt
-
+	mv binaryCode.txt ./Outputs/$(INPUT_NAME)/binaryCode.txt

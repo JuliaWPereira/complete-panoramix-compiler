@@ -5,8 +5,8 @@
 |-------------------------------------------------------|
 |          u |int   |        gcd |          1 |    -    |
 |          v |int   |        gcd |          1 |    -    |
-|          x |int   |       main |          5 |    -    |
-|          y |int   |       main |          5 |    -    |
-|       main |func  |       main |          3 |   void  |
+|          x |int   |       main |          8 |    -    |
+|          y |int   |       main |          8 |    -    |
+|       main |func  |       main |          6 |   void  |
 |        gcd |func  |        gcd |          1 |   int   |
 |-------------------------------------------------------|
