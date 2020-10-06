@@ -636,8 +636,8 @@ void createSymTab(struct ast *ast)
 		if(symtab[i]->next != NULL)
 		{
 			sl = symtab[i]->next;
-			if(sl->sym->type == 'F')
-				seeParameters(sl->sym);
+			//if(sl->sym->type == 'F')
+				//seeParameters(sl->sym);
 		}
 	}
 	verifyMain();

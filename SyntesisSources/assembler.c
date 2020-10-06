@@ -82,16 +82,16 @@ void add_mem(struct memoryList *new_mem)
 void assembly_FUN(char* arg_1, char* arg_2)
 {
 	struct memoryList *new_mem;
-	struct assembly_code *assembly;
+	//struct assembly_code *assembly;
 	int type;
 	type = (!strcmp(arg_1, "INT"))? 1:0;
 	new_mem = create_mem_list(arg_2, type, 2, next_free_memory_pos, 0, assembly_code_line);
 	
 	add_mem(new_mem);
 	
-	assembly = create_assembly_code("FUN", strdup(arg_2)	, 0, assembly_code_line++, 0);
+	//assembly = create_assembly_code("FUN", strdup(arg_2)	, 0, assembly_code_line++, 0);
 	
-	add_assembly(assembly);
+	//add_assembly(assembly);
 }
 
 int string_to_int(char *str)
@@ -267,7 +267,7 @@ int get_type(char *label)
 
 void assembly_CALL(char *arg_1, char* arg_2)
 {
-	struct memoryList *new_mem;
+	//struct memoryList *new_mem;
 	struct assembly_code *assembly;
 	char *s, *t;
 	//printf(">>%s\n", arg_2);
@@ -790,18 +790,12 @@ void assembly_GT(char *arg_1, char* arg_2, char* arg_3)
 		add_assembly(assembly);
 	}
 
-	assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
-	add_assembly(assembly);
+	//assembly = create_assembly_code("SWAP", NULL, 0, assembly_code_line++, 1);
+	//add_assembly(assembly);
 
 	assembly = create_assembly_code("LEQ", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
 
-//	assembly = create_assembly_code("PUSH", itoa(1,10), 0, assembly_code_line++, 1);
-//	add_assembly(assembly);
-
-//	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
-//	add_assembly(assembly);
-	
 	t = strdup("&");
 	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
 	add_assembly(assembly);
@@ -1218,7 +1212,7 @@ void binary_PUSH(struct assembly_instruction assembly)
 	if(isdigit(assembly.parameter[0])){
 		int value = string_to_int(assembly.parameter);			
 		char *bin_value = itoa(value,2);
-		printf("1");
+		printf("0");
 		for(int i = 0; i < 15 - strlen(bin_value);i++) printf("0");
 		printf("%s", bin_value);
 	}else{
@@ -1226,7 +1220,7 @@ void binary_PUSH(struct assembly_instruction assembly)
 		label = strdup(assembly.parameter);
 	    memmove(label, label+1, strlen(label));
 		int add = search_address(label);
-		printf("1");
+		printf("0");
 		char *bin_value = itoa(add,2);
 		for(int i = 0; i < 15 - strlen(bin_value);i++) printf("0");
 		printf("%s", bin_value);
