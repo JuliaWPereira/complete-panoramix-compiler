@@ -1186,9 +1186,16 @@ int search_address(char *label)
 			memlist = memlist->next;
 		}
 	}
+	memlist = begin_memList;
+	while(memlist != NULL)
+	{
+		if(!strcmp(memlist->mem.label,label)){
+			return memlist->mem.first_pos;
+		}
+		memlist = memlist->next;
+	}
 	
-	
-
+	printf("sss\n");
 	return -1;
 }
 
