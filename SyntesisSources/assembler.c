@@ -891,6 +891,8 @@ void assembly_RET(char *arg_1)
 		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}
+		assembly = create_assembly_code("EXIT", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
 }
 
 void assembly_END(char *arg_1)
