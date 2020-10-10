@@ -23,6 +23,7 @@ PUSH &$t4
 !
 PUSH &$t4 
 @
+EXIT
 CALL L2 
 PUSH &v 
 @
@@ -74,6 +75,7 @@ PUSH &$t13
 !
 PUSH &$t13 
 @
+EXIT
 EXIT
 PUSH &x 
 @
