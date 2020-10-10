@@ -1,0 +1,559 @@
+PUSH &high 
+!
+PUSH &low 
+!
+PUSH &high 
+@
+PUSH &$t1 
+!
+PUSH &low 
+@
+PUSH &$t2 
+!
+PUSH &k 
+@
+PUSH &$t3 
+!
+PUSH &low 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &k 
+!
+PUSH &x 
+@
+PUSH &$t5 
+!
+PUSH &low 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &a 
++
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &x 
+!
+PUSH &i 
+@
+PUSH &$t8 
+!
+PUSH &low 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH 1 
++
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t11 
+!
+PUSH &high 
+@
+PUSH &$t12 
+!
+PUSH &$t11 
+@
+PUSH &$t12 
+@
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t13 
+!
+PUSH &$t13 
+@
+IF L2 
+PUSH &i 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &a 
++
+@
+PUSH &$t15 
+!
+PUSH &x 
+@
+PUSH &$t0 
+!
+PUSH &$t15 
+@
+PUSH &$t0 
+@
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+IF L3 
+PUSH &x 
+@
+PUSH &$t2 
+!
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &a 
++
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &x 
+!
+PUSH &k 
+@
+PUSH &$t5 
+!
+PUSH &i 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &k 
+!
+PUSH &i 
+@
+PUSH &$t7 
+!
+PUSH &i 
+@
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH 1 
++
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &i 
+!
+CALL L1 
+PUSH &k 
+@
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+EXIT
+EXIT
+PUSH &i 
+@
+PUSH &$t11 
+!
+PUSH &low 
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t13 
+!
+PUSH &high 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH 1 
+-
+PUSH &$t15 
+!
+PUSH &$t13 
+@
+PUSH &$t15 
+@
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t0 
+!
+PUSH &$t0 
+@
+IF L5 
+PUSH &k 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &a 
++
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &high 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+CALL minloc 
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &low 
+!
+PUSH &t 
+@
+PUSH &$t6 
+!
+PUSH &k 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &a 
++
+@
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &t 
+!
+PUSH &k 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &a 
++
+@
+PUSH &$t10 
+!
+PUSH &i 
+@
+PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH &a 
++
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH &a 
+!
+PUSH &i 
+@
+PUSH &$t13 
+!
+PUSH &$t13 
+@
+PUSH &a 
++
+@
+PUSH &$t14 
+!
+PUSH &t 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &a 
+!
+PUSH &i 
+@
+PUSH &$t0 
+!
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH 1 
++
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &$t0 
+!
+PUSH &$t0 
+@
+PUSH &i 
+!
+CALL L4 
+EXIT
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH &0 
+@
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH 10 
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+IF L7 
+PUSH &i 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &vet 
++
+@
+PUSH &$t7 
+!
+INPUT READ
+INPUT LOAD
+PUSH &$t8 
+!
+PUSH &$t8 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &vet 
+!
+PUSH &i 
+@
+PUSH &$t9 
+!
+PUSH &i 
+@
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH 1 
++
+PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &i 
+!
+CALL L6 
+PUSH &$t1 
+@
+PUSH &vet 
++
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH 0 
+PUSH 10 
+CALL sort 
+PUSH &i 
+@
+PUSH &$t14 
+!
+PUSH &0 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+PUSH 10 
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t0 
+!
+PUSH &$t0 
+@
+IF L9 
+PUSH &i 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &vet 
++
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+OUTPUT SEND
+OUTPUT PRINT
+PUSH &i 
+@
+PUSH &$t4 
+!
+PUSH &i 
+@
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+PUSH 1 
++
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH &i 
+!
+CALL L8 
+HALT
