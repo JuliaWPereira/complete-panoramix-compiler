@@ -216,6 +216,7 @@ void assembly_STORE(char* arg_1, char* arg_2)
 	struct assembly_code *assembly;
 	char *s, *t;
 	
+	
 	t = strdup("&");	
 	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
 	add_assembly(assembly);
@@ -237,12 +238,17 @@ void assembly_ASSIGN(char* arg_1, char* arg_2)
 	struct assembly_code *assembly;
 	char *s, *t;
 	
-	t = strdup("&");	
-	assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
-	add_assembly(assembly);
-
-	assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
-	add_assembly(assembly);
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
 
 	t = strdup("&");
 	assembly = create_assembly_code("PUSH", strcat(t,arg_1), 0, assembly_code_line++, 1);
@@ -356,6 +362,19 @@ void assembly_SUB(char *arg_1, char* arg_2, char* arg_3)
 	struct assembly_code *assembly;
 	char *s, *t;
 	
+	
+	if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else{
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+		
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+
 	if(isdigit(arg_2[0])){
 		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
@@ -368,17 +387,6 @@ void assembly_SUB(char *arg_1, char* arg_2, char* arg_3)
 		add_assembly(assembly);
 	}
 
-	if(isdigit(arg_3[0])){
-		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
-		add_assembly(assembly);
-	}else{
-		t = strdup("&");
-		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
-		add_assembly(assembly);
-		
-		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
-		add_assembly(assembly);
-	}
 
 	assembly = create_assembly_code("-", NULL, 0, assembly_code_line++, 1);
 	add_assembly(assembly);
@@ -441,24 +449,24 @@ void assembly_DIV(char *arg_1, char* arg_2, char* arg_3)
 	struct assembly_code *assembly;
 	char *s, *t;
 	
-	if(isdigit(arg_2[0])){
-		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
+if(isdigit(arg_3[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}else{
-		t = strdup("&");	
-		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
+		t = strdup("&");
+		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 		
 		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}
 
-	if(isdigit(arg_3[0])){
-		assembly = create_assembly_code("PUSH", strdup(arg_3), 0, assembly_code_line++, 1);
+	if(isdigit(arg_2[0])){
+		assembly = create_assembly_code("PUSH", strdup(arg_2), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}else{
-		t = strdup("&");
-		assembly = create_assembly_code("PUSH", strcat(t,arg_3), 0, assembly_code_line++, 1);
+		t = strdup("&");	
+		assembly = create_assembly_code("PUSH", strcat(t,arg_2), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 		
 		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
@@ -891,8 +899,8 @@ void assembly_RET(char *arg_1)
 		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 	}
-		assembly = create_assembly_code("EXIT", NULL, 0, assembly_code_line++, 1);
-		add_assembly(assembly);
+		//assembly = create_assembly_code("EXIT", NULL, 0, assembly_code_line++, 1);
+		//add_assembly(assembly);
 }
 
 void assembly_END(char *arg_1)
@@ -1197,7 +1205,7 @@ int search_address(char *label)
 		memlist = memlist->next;
 	}
 	
-	printf("sss\n");
+	//printf("sss\n");
 	return -1;
 }
 
@@ -1294,18 +1302,30 @@ void binary_CALL(struct assembly_instruction assembly)
     int inst = search_label(label);
     int diff = inst - assembly.line;
 	int comp_2 = (diff < 0)? 1:0;
-	
+	int tam = 11;
 	printf("10100");
+	//printf(">>%d and diff:%d\n",inst,diff);
 	char *bin_value = itoa(abs(diff),2);
-
+	//printf(">>bin:%s\n",bin_value);
 	if(comp_2 == 1){
 		char *str_zeros;
-		str_zeros = string_repeat(11-strlen(bin_value),"0");
+		printf("1");
+		str_zeros = string_repeat(10-strlen(bin_value),"0");
 		strcat(str_zeros,bin_value);
-		
-		bin_value = complement_2(str_zeros);
+		tam = 10;
+		//bin_value = complement_2(str_zeros);
+		//printf("comp2: %s\n",bin_value);
 	}
 
+	for(int i = 0; i < tam - strlen(bin_value);i++) printf("0");
+	printf("%s", bin_value);
+}
+
+void binary_MAIN()
+{
+	int inst = search_label("main");
+    printf("10100");
+	char *bin_value = itoa(abs(inst + 1),2);
 	for(int i = 0; i < 11 - strlen(bin_value);i++) printf("0");
 	printf("%s", bin_value);
 }
@@ -1323,11 +1343,12 @@ void binary_WRITE(struct assembly_instruction assembly)
 	printf("%s", bin_value);
 }
 
-
 void generate_binary()
 {
 	struct assembly_code *assembly;
 	assembly = begin_assembly;
+	binary_MAIN();
+	printf("\n");
 	while(assembly != NULL)
 	{
 		if(!strcmp(assembly->inst.operation,"FUN")){
@@ -1377,7 +1398,7 @@ void generate_binary()
 		}
 		if(!(strcmp(assembly->inst.operation,"/"))){
 			//printf("/:\n\t");
-			printf("1000000100000100\n");
+			printf("1000000010000100\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"*"))){
 			//printf("*:\n\t");
@@ -1453,7 +1474,7 @@ void generate_binary()
 		}
 		if(!(strcmp(assembly->inst.operation,"!"))){
 			//printf("!:\n\t");
-			printf("1111000000000000\n");
+			printf("1111100000000000\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"@"))){
 			//printf("@:\n\t");

@@ -3,7 +3,7 @@ PROJ_NAME = panoramix
 all: $(PROJ_NAME)
 
 $(PROJ_NAME): *.o
-	gcc -g -o $@ *.o -ly -lfl
+	gcc -g -o $@ *.o -ll -lfl
 	mv $(PROJ_NAME) ../$(PROJ_NAME)
 
 *.o: *.c $(PROJ_NAME).l $(PROJ_NAME).y

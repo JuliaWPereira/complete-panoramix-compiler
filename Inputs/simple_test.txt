@@ -1,0 +1,13 @@
+void main(void){
+	int n;
+	int fact;
+	n = input();
+	fact = 1;
+	while(n > 1)
+	{
+		fact = fact * n;
+		output(fact);
+		n = n - 1;
+	}
+	output(fact);
+}

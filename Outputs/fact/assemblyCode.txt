@@ -4,17 +4,13 @@ PUSH &$t1
 !
 PUSH &$t1 
 @
-PUSH 0 
-LEQ
 PUSH 1 
--
+LEQ
 PUSH &$t2 
 !
 PUSH &$t2 
 @
 IF L1 
-PUSH 1 
-EXIT
 PUSH &n 
 @
 PUSH &$t3 
@@ -23,9 +19,9 @@ PUSH &n
 @
 PUSH &$t4 
 !
+PUSH 1 
 PUSH &$t4 
 @
-PUSH 1 
 -
 PUSH &$t5 
 !
@@ -43,7 +39,7 @@ PUSH &$t7
 !
 PUSH &$t7 
 @
-EXIT
+PUSH 1 
 EXIT
 PUSH &n 
 @

@@ -1,4 +1,4 @@
-INPUT_NAME = sort
+INPUT_NAME = fact
 
 all:
 	(cd Sources;make all)
