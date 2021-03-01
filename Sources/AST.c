@@ -372,7 +372,10 @@ void insertnode(struct ast *a)
 			sym->father = searchSym(sym);
 			if(searchSym(sym) == NULL) /* function is not declared */
 			{
-				if(strcmp(sym->name,"input") && strcmp(sym->name,"output"))
+				if(strcmp(sym->name,"input") && strcmp(sym->name,"output") && 
+				   strcmp(sym->name,"DowloadRStack") && strcmp(sym->name,"DowloadDStack") && 
+				   strcmp(sym->name,"SaveRStack") && strcmp(sym->name,"SaveDStack") &&
+				   strcmp(sym->name,"State"))
 				{
 					printf("%d: semantic error: Implicit declaration of function %s\n",sym->lineno,sym->name);
 				}

@@ -1,4 +1,4 @@
-INPUT_NAME = fact
+INPUT_NAME = obelixOS
 
 all:
 	(cd Sources;make all)

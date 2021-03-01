@@ -1,0 +1,13 @@
+|-------------------------------------------------------|
+|                      Symbol Table                     |
+|-------------------------------------------------------|
+| identifier | type |      scope |  decl_line | return  |
+|-------------------------------------------------------|
+|          f |int   |  fibonacci |          4 |    -    |
+|          g |int   |  fibonacci |          5 |    -    |
+|          i |int   |  fibonacci |          3 |    -    |
+|          n |int   |  fibonacci |          1 |    -    |
+|  fibonacci |func  |  fibonacci |          1 |   int   |
+|       soma |int   |  fibonacci |          6 |    -    |
+|       main |func  |       main |         20 |   void  |
+|-------------------------------------------------------|

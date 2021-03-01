@@ -1,0 +1,166 @@
+PUSH &f 
+@
+PUSH &$t1 
+!
+PUSH 1 
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &f 
+!
+PUSH &g 
+@
+PUSH &$t2 
+!
+PUSH 1 
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &g 
+!
+PUSH &i 
+@
+PUSH &$t3 
+!
+PUSH 3 
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &i 
+!
+PUSH &i 
+@
+PUSH &$t4 
+!
+PUSH &n 
+@
+PUSH &$t5 
+!
+PUSH &$t4 
+@
+PUSH &$t5 
+@
+-
+DUP
+PUSH 0 
+LEQ
+SWAP
+PUSH 0 
+SWAP
+LEQ
+--
+PUSH 1 
+-
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+IF L2 
+PUSH &soma 
+@
+PUSH &$t7 
+!
+PUSH &f 
+@
+PUSH &$t8 
+!
+PUSH &g 
+@
+PUSH &$t9 
+!
+PUSH &$t8 
+@
+PUSH &$t9 
+@
++
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+PUSH &$t7 
+!
+PUSH &$t7 
+@
+PUSH &soma 
+!
+PUSH &f 
+@
+PUSH &$t11 
+!
+PUSH &g 
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &$t11 
+!
+PUSH &$t11 
+@
+PUSH &f 
+!
+PUSH &g 
+@
+PUSH &$t13 
+!
+PUSH &soma 
+@
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &$t13 
+!
+PUSH &$t13 
+@
+PUSH &g 
+!
+PUSH &soma 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+OUTPUT SEND
+OUTPUT PRINT
+CALL L1 
+PUSH &g 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+EXIT
+PUSH &n 
+@
+PUSH &$t2 
+!
+INPUT READ
+INPUT LOAD
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &n 
+!
+PUSH &n 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+CALL fibonacci 
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+OUTPUT SEND
+OUTPUT PRINT
+HALT

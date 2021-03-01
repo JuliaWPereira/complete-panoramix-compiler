@@ -299,7 +299,36 @@ void assembly_CALL(char *arg_1, char* arg_2)
 		assembly = create_assembly_code("OUTPUT PRINT", NULL, 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 
-	}else{
+	}else if(!strcmp(arg_2,"DowloadRStack")){
+		assembly = create_assembly_code("DOWNLOAD_RETURN_STACK", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else if(!strcmp(arg_2,"DowloadDStack")){
+		assembly = create_assembly_code("DOWNLOAD_DATA_STACK", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else if(!strcmp(arg_2,"SaveRStack")){
+		assembly = create_assembly_code("SAVE_RETURN_STACK", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}else if(!strcmp(arg_2,"SaveDStack")){
+		assembly = create_assembly_code("SAVE_DATA_STACK", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+	else if(!strcmp(arg_2,"State")){
+		assembly = create_assembly_code("PUSH", "8", 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("*", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("PUSH", "200", 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("+", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+
+		assembly = create_assembly_code("@", NULL, 0, assembly_code_line++, 1);
+		add_assembly(assembly);
+	}
+	else{
 		assembly = create_assembly_code("CALL", strdup(arg_2), 0, assembly_code_line++, 1);
 		add_assembly(assembly);
 		
@@ -1460,7 +1489,22 @@ void generate_binary()
 			//printf("OUTPUT PRINT:\n\t");
 			printf("1101000000000000\n");
 		}
-
+		if(!(strcmp(assembly->inst.operation,"DOWNLOAD_RETURN_STACK"))){
+			//printf("OUTPUT PRINT:\n\t");
+			printf("1110111000000001\n");
+		}
+		if(!(strcmp(assembly->inst.operation,"DOWNLOAD_DATA_STACK"))){
+			//printf("OUTPUT PRINT:\n\t");
+			printf("1110111000000000\n");
+		}
+		if(!(strcmp(assembly->inst.operation,"SAVE_DATA_STACK"))){
+			//printf("OUTPUT PRINT:\n\t");
+			printf("1110111100000000\n");
+		}
+		if(!(strcmp(assembly->inst.operation,"SAVE_RETURN_STACK"))){
+			//printf("OUTPUT PRINT:\n\t");
+			printf("1110111100000001\n");
+		}
 		/* Branch and memory instructions  */
 		if(!(strcmp(assembly->inst.operation,"IF"))){
 			//printf("IF:\n\t");
