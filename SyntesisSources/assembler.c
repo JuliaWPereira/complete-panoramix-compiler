@@ -1490,19 +1490,15 @@ void generate_binary()
 			printf("1101000000000000\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"DOWNLOAD_RETURN_STACK"))){
-			//printf("OUTPUT PRINT:\n\t");
 			printf("1110111000000001\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"DOWNLOAD_DATA_STACK"))){
-			//printf("OUTPUT PRINT:\n\t");
 			printf("1110111000000000\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"SAVE_DATA_STACK"))){
-			//printf("OUTPUT PRINT:\n\t");
 			printf("1110111100000000\n");
 		}
 		if(!(strcmp(assembly->inst.operation,"SAVE_RETURN_STACK"))){
-			//printf("OUTPUT PRINT:\n\t");
 			printf("1110111100000001\n");
 		}
 		/* Branch and memory instructions  */

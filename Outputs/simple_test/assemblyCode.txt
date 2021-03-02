@@ -1,0 +1,107 @@
+PUSH &n 
+@
+PUSH &$t1 
+!
+INPUT READ
+INPUT LOAD
+PUSH &$t2 
+!
+PUSH &$t2 
+@
+PUSH &$t1 
+!
+PUSH &$t1 
+@
+PUSH &n 
+!
+PUSH &fact 
+@
+PUSH &$t3 
+!
+PUSH 1 
+PUSH &$t3 
+!
+PUSH &$t3 
+@
+PUSH &fact 
+!
+PUSH &n 
+@
+PUSH &$t4 
+!
+PUSH &$t4 
+@
+PUSH 1 
+LEQ
+PUSH &$t5 
+!
+PUSH &$t5 
+@
+IF L2 
+PUSH &fact 
+@
+PUSH &$t6 
+!
+PUSH &fact 
+@
+PUSH &$t7 
+!
+PUSH &n 
+@
+PUSH &$t8 
+!
+PUSH &$t7 
+@
+PUSH &$t8 
+@
+*
+PUSH &$t9 
+!
+PUSH &$t9 
+@
+PUSH &$t6 
+!
+PUSH &$t6 
+@
+PUSH &fact 
+!
+PUSH &fact 
+@
+PUSH &$t10 
+!
+PUSH &$t10 
+@
+OUTPUT SEND
+OUTPUT PRINT
+PUSH &n 
+@
+PUSH &$t12 
+!
+PUSH &n 
+@
+PUSH &$t13 
+!
+PUSH 1 
+PUSH &$t13 
+@
+-
+PUSH &$t14 
+!
+PUSH &$t14 
+@
+PUSH &$t12 
+!
+PUSH &$t12 
+@
+PUSH &n 
+!
+CALL L1 
+PUSH &fact 
+@
+PUSH &$t15 
+!
+PUSH &$t15 
+@
+OUTPUT SEND
+OUTPUT PRINT
+HALT

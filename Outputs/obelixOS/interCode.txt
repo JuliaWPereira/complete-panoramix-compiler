@@ -1,0 +1,7 @@
+(FUN,VOID,main,-)
+(CALL,$t1,DowloadDStack,0)
+(CALL,$t2,DowloadRStack,0)
+(CALL,$t3,SaveRStack,0)
+(CALL,$t4,SaveDStack,0)
+(END,main,-,-)
+(HALT,-,-,-)
